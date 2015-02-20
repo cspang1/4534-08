@@ -1,0 +1,5 @@
+_main: CODE, 65382 0 56
+__initialization: CODE, 65354 0 2
+_Write1USART: CODE, 65362 0 20
+_Open1USART: CODE, 65438 0 90
+Total: 168

@@ -1,0 +1,537 @@
+
+
+Microchip Technology PIC18 LITE Macro Assembler V1.30 build 55553 
+                                                                                               Mon Feb 16 16:49:57 2015
+
+Microchip Technology Omniscient Code Generator (Lite mode) build 55553
+     1                           	processor	18F46J50
+     2                           	fnconf	rparam,??,?,0
+     3                           	opt	pw 120
+     4                           	opt	lm
+     5                           	psect	text0,global,reloc=2,class=CODE,delta=1
+     6                           	psect	cinit,global,reloc=2,class=CODE,delta=1
+     7                           	psect	bssCOMRAM,global,class=COMRAM,space=1,delta=1
+     8                           	psect	cstackCOMRAM,global,class=COMRAM,space=1,delta=1
+     9                           	psect	text1,global,reloc=2,class=CODE,delta=1
+    10                           	psect	text2,global,reloc=2,class=CODE,delta=1
+    11                           	psect	intsave_regs,global,class=BIGRAM,space=1,delta=1
+    12                           	psect	rparam,global,class=COMRAM,space=1,delta=1
+    13  0000                     _LATB	set	3978
+    14  0000                     _OSCCON	set	4051
+    15  0000                     _OSCTUNEbits	set	3995
+    16  0000                     _PIE1bits	set	3997
+    17  0000                     _RCSTA1	set	4012
+    18  0000                     _RCSTA1bits	set	4012
+    19  0000                     _SPBRG1	set	4016
+    20  0000                     _SPBRGH1	set	3967
+    21  0000                     _TRISB	set	3987
+    22  0000                     _TXREG1	set	4014
+    23  0000                     _TXSTA1	set	4013
+    24  0000                     _TXSTA1bits	set	4013
+    25                           
+    26 ;;
+    27 ;;Main: autosize = 0, tempsize = 1, incstack = 0, save=0
+    28 ;;
+    29 ;; *************** function _main *****************
+    30 ;; Defined at:
+    31 ;;		line 47 in file "main.c"
+    32 ;; Parameters:    Size  Location     Type
+    33 ;;		None
+    34 ;; Auto vars:     Size  Location     Type
+    35 ;;  baud            1    8[COMRAM] unsigned char 
+    36 ;;  UARTConfig      1    7[COMRAM] unsigned char 
+    37 ;; Return value:  Size  Location     Type
+    38 ;;		None               void
+    39 ;; Registers used:
+    40 ;;		wreg, status,2, cstack
+    41 ;; Tracked objects:
+    42 ;;		On entry : 0/0
+    43 ;;		On exit  : 0/0
+    44 ;;		Unchanged: 0/0
+    45 ;; Data sizes:     COMRAM   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK1
+      +1  BANK12  BANK13  BANK14
+    46 ;;      Params:         0       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+    47 ;;      Locals:         2       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+    48 ;;      Temps:          1       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+    49 ;;      Totals:         3       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+    50 ;;Total ram usage:        3 bytes
+    51 ;; Hardware stack levels required when called:    1
+    52 ;; This function calls:
+    53 ;;		_Open1USART
+    54 ;;		_Write1USART
+    55 ;; This function is called by:
+    56 ;;		Startup code after reset
+    57 ;; This function uses a non-reentrant model
+    58 ;;
+    59                           
+    60                           	psect	text0
+    61  00FF66                     __ptext0:
+    62                           	opt stack 0
+    63  00FF66                     _main:
+    64                           	opt stack 29
+    65                           
+    66                           ;main.c: 48: unsigned char UARTConfig, baud;
+    67                           ;main.c: 49: OSCCON = 0xE0;
+    68                           
+    69                           ;incstack = 0
+    70  00FF66  0EE0               	movlw	224
+    71  00FF68  6ED3               	movwf	4051,c	;volatile
+    72                           
+    73                           ;main.c: 50: OSCTUNEbits.PLLEN = 1;
+    74  00FF6A  8C9B               	bsf	3995,6,c	;volatile
+    75                           
+    76                           ;main.c: 53: TRISB = 0xFF;
+    77  00FF6C  6893               	setf	3987,c	;volatile
+    78                           
+    79                           ;main.c: 54: LATB = 0x0;
+    80  00FF6E  0E00               	movlw	0
+    81  00FF70  6E8A               	movwf	3978,c	;volatile
+    82                           
+    83                           ;main.c: 57: PIE1bits.SSPIE = 1;
+    84  00FF72  869D               	bsf	3997,3,c	;volatile
+    85                           
+    86                           ;main.c: 59: UARTConfig = 0b01111111 & 0b11111111 & 0b11111110 & 0b11111101 & 0b11111111;
+    87  00FF74  6E07               	movwf	??_main& (0+255),c
+    88  00FF76  0E7C               	movlw	124
+    89  00FF78  6E08               	movwf	main@UARTConfig,c
+    90  00FF7A  5007               	movf	??_main& (0+255),w,c
+    91                           
+    92                           ;main.c: 60: baud = 77;
+    93  00FF7C  6E07               	movwf	??_main& (0+255),c
+    94  00FF7E  0E4D               	movlw	77
+    95  00FF80  6E09               	movwf	main@baud,c
+    96  00FF82  5007               	movf	??_main& (0+255),w,c
+    97                           
+    98                           ;main.c: 61: Open1USART(UARTConfig, baud);
+    99  00FF84  C009  F001         	movff	main@baud,Open1USART@spbrg
+   100  00FF88  6A02               	clrf	Open1USART@spbrg+1,c
+   101  00FF8A  5008               	movf	main@UARTConfig,w,c
+   102  00FF8C  ECCF  F07F         	call	_Open1USART
+   103  00FF90  D003               	goto	l706
+   104  00FF92                     l704:
+   105  00FF92  0E71               	movlw	113
+   106  00FF94  ECA9  F07F         	call	_Write1USART
+   107  00FF98                     l706:
+   108  00FF98  A2AD               	btfss	4013,1,c	;volatile
+   109  00FF9A  D7FE               	goto	l706
+   110  00FF9C  D7FA               	goto	l704
+   111  00FF9E                     __end_of_main:
+   112                           	opt stack 0
+   113                           
+   114                           	psect	cinit
+   115  00FF4A                     __pcinit:
+   116                           	opt stack 0
+   117  00FF4A                     start_initialization:
+   118                           	opt stack 0
+   119  00FF4A                     __initialization:
+   120                           	opt stack 0
+   121                           
+   122                           ; Clear objects allocated to COMRAM (1 bytes)
+   123  00FF4A  6A0A               	clrf	__pbssCOMRAM& (0+255),c
+   124  00FF4C                     end_of_initialization:
+   125                           	opt stack 0
+   126  00FF4C                     __end_of__initialization:
+   127                           	opt stack 0
+   128  00FF4C  0100               	movlb	0
+   129  00FF4E  EFB3  F07F         	goto	_main	;jump to C main() function
+   130                           
+   131                           	psect	bssCOMRAM
+   132  00000A                     __pbssCOMRAM:
+   133                           	opt stack 0
+   134  00000A                     _USART1_Status:
+   135                           	opt stack 0
+   136  00000A                     	ds	1
+   137                           
+   138                           	psect	cstackCOMRAM
+   139  000001                     __pcstackCOMRAM:
+   140                           	opt stack 0
+   141  000001                     Write1USART@data:
+   142                           	opt stack 0
+   143  000001                     Open1USART@spbrg:
+   144                           	opt stack 0
+   145                           
+   146                           ; 2 bytes @ 0x0
+   147  000001                     	ds	2
+   148  000003                     ??_Open1USART:
+   149                           
+   150                           ; 0 bytes @ 0x2
+   151  000003                     	ds	3
+   152  000006                     Open1USART@config:
+   153                           	opt stack 0
+   154                           
+   155                           ; 1 bytes @ 0x5
+   156  000006                     	ds	1
+   157  000007                     ??_main:
+   158                           
+   159                           ; 0 bytes @ 0x6
+   160  000007                     	ds	1
+   161  000008                     main@UARTConfig:
+   162                           	opt stack 0
+   163                           
+   164                           ; 1 bytes @ 0x7
+   165  000008                     	ds	1
+   166  000009                     main@baud:
+   167                           	opt stack 0
+   168                           
+   169                           ; 1 bytes @ 0x8
+   170  000009                     	ds	1
+   171                           
+   172 ;; *************** function _Write1USART *****************
+   173 ;; Defined at:
+   174 ;;		line 14 in file "E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c"
+   175 ;; Parameters:    Size  Location     Type
+   176 ;;  data            1    wreg     unsigned char 
+   177 ;; Auto vars:     Size  Location     Type
+   178 ;;  data            1    0[COMRAM] unsigned char 
+   179 ;; Return value:  Size  Location     Type
+   180 ;;		None               void
+   181 ;; Registers used:
+   182 ;;		wreg
+   183 ;; Tracked objects:
+   184 ;;		On entry : 0/0
+   185 ;;		On exit  : 0/0
+   186 ;;		Unchanged: 0/0
+   187 ;; Data sizes:     COMRAM   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK1
+      +1  BANK12  BANK13  BANK14
+   188 ;;      Params:         0       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   189 ;;      Locals:         1       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   190 ;;      Temps:          0       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   191 ;;      Totals:         1       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   192 ;;Total ram usage:        1 bytes
+   193 ;; Hardware stack levels used:    1
+   194 ;; This function calls:
+   195 ;;		Nothing
+   196 ;; This function is called by:
+   197 ;;		_main
+   198 ;; This function uses a non-reentrant model
+   199 ;;
+   200                           
+   201                           	psect	text1
+   202  00FF52                     __ptext1:
+   203                           	opt stack 0
+   204  00FF52                     _Write1USART:
+   205                           	opt stack 29
+   206                           
+   207                           ;incstack = 0
+   208                           ;Write1USART@data stored from wreg
+   209  00FF52  CFE8 F001          	movff	wreg,Write1USART@data
+   210  00FF56  ACAD               	btfss	4013,6,c	;volatile
+   211  00FF58  D003               	goto	l688
+   212  00FF5A  90AD               	bcf	4013,0,c	;volatile
+   213  00FF5C  B20A               	btfsc	_USART1_Status,1,c
+   214  00FF5E  80AD               	bsf	4013,0,c	;volatile
+   215  00FF60                     l688:
+   216  00FF60  C001  FFAE         	movff	Write1USART@data,4014	;volatile
+   217  00FF64  0012               	return	
+   218  00FF66                     __end_of_Write1USART:
+   219                           	opt stack 0
+   220                           wreg	equ	0xFE8
+   221                           
+   222 ;; *************** function _Open1USART *****************
+   223 ;; Defined at:
+   224 ;;		line 124 in file "E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c"
+   225 ;; Parameters:    Size  Location     Type
+   226 ;;  config          1    wreg     unsigned char 
+   227 ;;  spbrg           2    0[COMRAM] unsigned int 
+   228 ;; Auto vars:     Size  Location     Type
+   229 ;;  config          1    5[COMRAM] unsigned char 
+   230 ;; Return value:  Size  Location     Type
+   231 ;;		None               void
+   232 ;; Registers used:
+   233 ;;		wreg, status,2
+   234 ;; Tracked objects:
+   235 ;;		On entry : 0/0
+   236 ;;		On exit  : 0/0
+   237 ;;		Unchanged: 0/0
+   238 ;; Data sizes:     COMRAM   BANK0   BANK1   BANK2   BANK3   BANK4   BANK5   BANK6   BANK7   BANK8   BANK9  BANK10  BANK1
+      +1  BANK12  BANK13  BANK14
+   239 ;;      Params:         2       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   240 ;;      Locals:         1       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   241 ;;      Temps:          3       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   242 ;;      Totals:         6       0       0       0       0       0       0       0       0       0       0       0       
+      +0       0       0       0
+   243 ;;Total ram usage:        6 bytes
+   244 ;; Hardware stack levels used:    1
+   245 ;; This function calls:
+   246 ;;		Nothing
+   247 ;; This function is called by:
+   248 ;;		_main
+   249 ;; This function uses a non-reentrant model
+   250 ;;
+   251                           
+   252                           	psect	text2
+   253  00FF9E                     __ptext2:
+   254                           	opt stack 0
+   255  00FF9E                     _Open1USART:
+   256                           	opt stack 29
+   257                           
+   258                           ;incstack = 0
+   259                           ;Open1USART@config stored from wreg
+   260  00FF9E  CFE8 F006          	movff	wreg,Open1USART@config
+   261  00FFA2  0E00               	movlw	0
+   262  00FFA4  6EAD               	movwf	4013,c	;volatile
+   263  00FFA6  0E00               	movlw	0
+   264  00FFA8  6EAC               	movwf	4012,c	;volatile
+   265  00FFAA  B006               	btfsc	Open1USART@config,0,c
+   266  00FFAC  88AD               	bsf	4013,4,c	;volatile
+   267  00FFAE  A206               	btfss	Open1USART@config,1,c
+   268  00FFB0  D002               	goto	l652
+   269  00FFB2  8CAD               	bsf	4013,6,c	;volatile
+   270  00FFB4  8CAC               	bsf	4012,6,c	;volatile
+   271  00FFB6                     l652:
+   272  00FFB6  B406               	btfsc	Open1USART@config,2,c
+   273  00FFB8  8EAD               	bsf	4013,7,c	;volatile
+   274  00FFBA  A606               	btfss	Open1USART@config,3,c
+   275  00FFBC  D002               	goto	l45
+   276  00FFBE  88AC               	bsf	4012,4,c	;volatile
+   277  00FFC0  D001               	goto	l660
+   278  00FFC2                     l45:
+   279  00FFC2  8AAC               	bsf	4012,5,c	;volatile
+   280  00FFC4                     l660:
+   281  00FFC4  B806               	btfsc	Open1USART@config,4,c
+   282  00FFC6  84AD               	bsf	4013,2,c	;volatile
+   283  00FFC8  BA06               	btfsc	Open1USART@config,5,c
+   284  00FFCA  86AC               	bsf	4012,3,c	;volatile
+   285  00FFCC  AC06               	btfss	Open1USART@config,6,c
+   286  00FFCE  D002               	goto	l49
+   287  00FFD0  8A9D               	bsf	3997,5,c	;volatile
+   288  00FFD2  D001               	goto	l672
+   289  00FFD4                     l49:
+   290  00FFD4  9A9D               	bcf	3997,5,c	;volatile
+   291  00FFD6                     l672:
+   292  00FFD6  AE06               	btfss	Open1USART@config,7,c
+   293  00FFD8  D002               	goto	l51
+   294  00FFDA  889D               	bsf	3997,4,c	;volatile
+   295  00FFDC  D001               	goto	l52
+   296  00FFDE                     l51:
+   297  00FFDE  989D               	bcf	3997,4,c	;volatile
+   298  00FFE0                     l52:
+   299  00FFE0  C001  FFB0         	movff	Open1USART@spbrg,4016	;volatile
+   300  00FFE4  C002  F003         	movff	Open1USART@spbrg+1,??_Open1USART
+   301  00FFE8  C003  F004         	movff	??_Open1USART,??_Open1USART+1
+   302  00FFEC  6A05               	clrf	(??_Open1USART+2)& (0+255),c
+   303  00FFEE  5004               	movf	??_Open1USART+1,w,c
+   304  00FFF0  6E7F               	movwf	3967,c	;volatile
+   305  00FFF2  8AAD               	bsf	4013,5,c	;volatile
+   306  00FFF4  8EAC               	bsf	4012,7,c	;volatile
+   307  00FFF6  0012               	return	
+   308  00FFF8                     __end_of_Open1USART:
+   309                           	opt stack 0
+   310  0000                     wreg	equ	0xFE8
+   311                           wreg	equ	0xFE8
+   312                           
+   313                           	psect	rparam
+   314  0000                     wreg	equ	0xFE8
+
+
+Data Sizes:
+    Strings     0
+    Constant    0
+    Data        0
+    BSS         1
+    Persistent  0
+    Stack       0
+
+Auto Spaces:
+    Space          Size  Autos    Used
+    COMRAM           95      9      10
+    BANK0           160      0       0
+    BANK1           256      0       0
+    BANK2           256      0       0
+    BANK3           256      0       0
+    BANK4           256      0       0
+    BANK5           256      0       0
+    BANK6           256      0       0
+    BANK7           256      0       0
+    BANK8           256      0       0
+    BANK9           256      0       0
+    BANK10          256      0       0
+    BANK11          256      0       0
+    BANK12          256      0       0
+    BANK13          256      0       0
+    BANK14          192      0       0
+
+Pointer List with Targets:
+
+    None.
+
+Critical Paths under _main in COMRAM
+
+    _main->_Open1USART
+
+Critical Paths under _main in BANK0
+
+    None.
+
+Critical Paths under _main in BANK1
+
+    None.
+
+Critical Paths under _main in BANK2
+
+    None.
+
+Critical Paths under _main in BANK3
+
+    None.
+
+Critical Paths under _main in BANK4
+
+    None.
+
+Critical Paths under _main in BANK5
+
+    None.
+
+Critical Paths under _main in BANK6
+
+    None.
+
+Critical Paths under _main in BANK7
+
+    None.
+
+Critical Paths under _main in BANK8
+
+    None.
+
+Critical Paths under _main in BANK9
+
+    None.
+
+Critical Paths under _main in BANK10
+
+    None.
+
+Critical Paths under _main in BANK11
+
+    None.
+
+Critical Paths under _main in BANK12
+
+    None.
+
+Critical Paths under _main in BANK13
+
+    None.
+
+Critical Paths under _main in BANK14
+
+    None.
+
+Call Graph Tables:
+
+ ---------------------------------------------------------------------------------
+ (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+ ---------------------------------------------------------------------------------
+ (0) _main                                                 3     3      0     229
+                                              6 COMRAM     3     3      0
+                         _Open1USART
+                        _Write1USART
+ ---------------------------------------------------------------------------------
+ (1) _Write1USART                                          1     1      0      15
+                                              0 COMRAM     1     1      0
+ ---------------------------------------------------------------------------------
+ (1) _Open1USART                                           6     4      2     184
+                                              0 COMRAM     6     4      2
+ ---------------------------------------------------------------------------------
+ Estimated maximum stack depth 1
+ ---------------------------------------------------------------------------------
+
+ Call Graph Graphs:
+
+ _main (ROOT)
+   _Open1USART
+   _Write1USART
+
+ Address spaces:
+Name               Size   Autos  Total    Cost      Usage
+BIGRAM             EBF      0       0      35        0.0%
+BITBANK13          100      0       0      31        0.0%
+BANK13             100      0       0      32        0.0%
+BITBANK12          100      0       0      29        0.0%
+BANK12             100      0       0      30        0.0%
+BITBANK11          100      0       0      27        0.0%
+BANK11             100      0       0      28        0.0%
+BITBANK10          100      0       0      25        0.0%
+BANK10             100      0       0      26        0.0%
+BITBANK9           100      0       0      23        0.0%
+BANK9              100      0       0      24        0.0%
+BITBANK8           100      0       0      21        0.0%
+BANK8              100      0       0      22        0.0%
+BITBANK7           100      0       0      19        0.0%
+BANK7              100      0       0      20        0.0%
+BITBANK6           100      0       0      17        0.0%
+BANK6              100      0       0      18        0.0%
+BITBANK5           100      0       0      15        0.0%
+BANK5              100      0       0      16        0.0%
+BITBANK4           100      0       0      13        0.0%
+BANK4              100      0       0      14        0.0%
+BITBANK3           100      0       0      11        0.0%
+BANK3              100      0       0      12        0.0%
+BITBANK2           100      0       0       9        0.0%
+BANK2              100      0       0      10        0.0%
+BITBANK1           100      0       0       7        0.0%
+BANK1              100      0       0       8        0.0%
+BITBANK14           C0      0       0      33        0.0%
+BANK14              C0      0       0      34        0.0%
+BITBANK0            A0      0       0       4        0.0%
+BANK0               A0      0       0       5        0.0%
+BITCOMRAM           5F      0       0       0        0.0%
+COMRAM              5F      9       A       1       10.5%
+BITSFR_2             0      0       0      40        0.0%
+SFR_2                0      0       0      40        0.0%
+BITSFR_1             0      0       0      40        0.0%
+SFR_1                0      0       0      40        0.0%
+BITSFR               0      0       0      40        0.0%
+SFR                  0      0       0      40        0.0%
+STACK                0      0       0       2        0.0%
+NULL                 0      0       0       0        0.0%
+ABS                  0      0       A       6        0.0%
+DATA                 0      0       A       3        0.0%
+CODE                 0      0       0       0        0.0%
+
+
+Microchip Technology PIC18 Macro Assembler V1.30 build 55553 
+Symbol Table                                                                                   Mon Feb 16 16:49:57 2015
+
+                     l51 FFDE                       l52 FFE0                       l45 FFC2  
+                     l49 FFD4             __CFG_CP0$OFF 000000                      l704 FF92  
+                    l706 FF98                      l660 FFC4                      l652 FFB6  
+                    l672 FFD6                      l688 FF60                      wreg 000FE8  
+             _TXSTA1bits 000FAD             __CFG_IESO$ON 000000                     _LATB 000F8A  
+                   _main FF66   __CFG_DSWDTOSC$T1OSCREF 000000                     start 0002  
+          __CFG_PLLDIV$3 000000                    ?_main 0001                    _TRISB 000F93  
+         __CFG_FCMEN$OFF 000000           __CFG_T1DIG$OFF 000000          __initialization FF4A  
+           __end_of_main FF9E           __CFG_OSC$HSPLL 000000               _Open1USART FF9E  
+                 ??_main 0007            __activetblptr 000000           __CFG_WDTEN$OFF 000000  
+                 _RCSTA1 000FAC                   _OSCCON 000FD3                   _SPBRG1 000FB0  
+         __CFG_WPCFG$OFF 000000                   _TXREG1 000FAE                   _TXSTA1 000FAD  
+         __CFG_WPDIS$OFF 000000           __CFG_XINST$OFF 000000               __accesstop 0060  
+__end_of__initialization FF4C          __CFG_IOL1WAY$ON 000000     __CFG_WPEND$PAGE_WPFP 000000  
+         __pcstackCOMRAM 0001          __CFG_DSWDTPS$G2 000000              ?_Open1USART 0001  
+          ??_Write1USART 0001         Open1USART@config 0006                  _SPBRGH1 000F7F  
+    __size_of_Open1USART 005A                  __Hparam 0000                  __Lparam 0000  
+    __end_of_Write1USART FF66          __CFG_STVREN$OFF 000000                  __pcinit FF4A  
+                __ramtop 0F00                  __ptext0 FF66                  __ptext1 FF52  
+                __ptext2 FF9E     end_of_initialization FF4C         __CFG_DSBOREN$OFF 000000  
+       __CFG_CPUDIV$OSC1 000000              _Write1USART FF52        __CFG_WPFP$PAGE_63 000000  
+    __CFG_MSSP7B_EN$MSK7 000000             ??_Open1USART 0003         __CFG_DSWDTEN$OFF 000000  
+    start_initialization FF4A       __end_of_Open1USART FFF8         __CFG_LPT1OSC$OFF 000000  
+            __pbssCOMRAM 000A          Open1USART@spbrg 0001     __CFG_RTCOSC$T1OSCREF 000000  
+        Write1USART@data 0001                 _PIE1bits 000F9D         __CFG_WDTPS$32768 000000  
+           ?_Write1USART 0001                 __Hrparam 0000                 __Lrparam 0000  
+          __size_of_main 0038                 main@baud 0009            _USART1_Status 000A  
+            _OSCTUNEbits 000F9B           main@UARTConfig 0008               _RCSTA1bits 000FAC  
+   __size_of_Write1USART 0014  

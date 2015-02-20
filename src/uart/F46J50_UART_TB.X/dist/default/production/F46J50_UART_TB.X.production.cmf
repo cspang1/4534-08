@@ -1,0 +1,417 @@
+%CMF
+# %PSECTS Section
+# For each object file, details of its psects are enumerated here.
+# The begining of the section is indicated by %PSECTS.  The first
+# line indicates the name of the first object file, e.g.
+#    $foo.obj
+# Each line that follows describes a psect in that object file, until
+# the next object file.  The lines that describe a psect have the
+# format:
+#    <psect name> <class name> <space> <link address> <load addresses> <length> <delta>
+# All addresses and the length are given in unqualified hexadecimal
+# in delta units.  Any other numeric values are decimal.
+%PSECTS
+$C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+end_init CODE 0 0 0 4 1
+config CONFIG 0 FFF8 FFF8 8 1
+$dist/default/production\F46J50_UART_TB.X.production.obj
+text3 CODE 0 FF9E FF9E 5A 1
+text2 CODE 0 FF1C FF1C 34 1
+text1 CODE 0 FF08 FF08 14 1
+cstackCOMRAM COMRAM 1 1 1 9 1
+bssCOMRAM COMRAM 1 A A 1 1
+cinit CODE 0 FF00 FF00 8 1
+text0 CODE 0 FF50 FF50 4E 1
+# %UNUSED Section
+# This section enumerates the unused ranges of each CLASS. Each entry
+# is described on a single line as follows:
+#    <class name> <range> <delta>
+# Addresses given in the range are in hexadecimal and units of delta.
+%UNUSED
+BANK0 00060-000FF 1
+BANK1 00100-001FF 1
+BANK10 00A00-00AFF 1
+BANK11 00B00-00BFF 1
+BANK12 00C00-00CFF 1
+BANK13 00D00-00DFF 1
+BANK14 00E00-00EBF 1
+BANK2 00200-002FF 1
+BANK3 00300-003FF 1
+BANK4 00400-004FF 1
+BANK5 00500-005FF 1
+BANK6 00600-006FF 1
+BANK7 00700-007FF 1
+BANK8 00800-008FF 1
+BANK9 00900-009FF 1
+BIGRAM 0000B-00EBF 1
+CODE 00004-0FEFF 1
+COMRAM 0000B-0005F 1
+CONST 00004-0FEFF 1
+MEDIUMCONST 00F00-0FEFF 1
+RAM 00060-00EBF 1
+SFR 00EC0-00FFF 1
+SMALLCONST 00F00-0FEFF 1
+STACK 00060-009FF 1
+# %LINETAB Section
+# This section enumerates the file/line to address mappings.
+# The beginning of the section is indicated by %LINETAB.
+# The first line indicates the name of the first object file, e.g.
+#   $foo.obj
+# Each line that follows describes a single mapping until the next
+# object file.  Mappings have the following format:
+#    <file name>:<line number> <address> <psect name> <class name>
+# The address is absolute and given given in unqualified hex 
+# in delta units of the psect. All mappings within an object file
+# are in ascending order of addresses.
+# All other numeric values are in decimal.
+%LINETAB
+$dist/default/production\F46J50_UART_TB.X.production.obj
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":816 FF00 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":818 FF00 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":821 FF00 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":832 FF00 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":838 FF02 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":839 FF02 cinit CODE
+"C:\Users\Escher\AppData\Local\Temp\s1dag.":840 FF04 cinit CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":14 FF08 text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":16 FF0C text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":18 FF10 text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":19 FF12 text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":20 FF14 text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":23 FF16 text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1write.c":24 FF1A text1 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":43 FF1C text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":45 FF20 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":47 FF26 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":49 FF34 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":50 FF38 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":52 FF3C text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":54 FF3E text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":55 FF42 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":56 FF46 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":57 FF46 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":88 FF48 text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":89 FF4A text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":91 FF4C text2 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\Timers\t1open.c":93 FF4E text2 CODE
+"E:\MPLAB\xc8\v1.30\include\pic18f46j50.h":10433 FF50 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":47 FF50 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":49 FF50 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":50 FF54 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":53 FF56 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":54 FF58 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":56 FF5C text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":61 FF6A text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":63 FF6C text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":65 FF6E text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":68 FF70 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":70 FF72 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":71 FF7A text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":72 FF82 text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":74 FF8E text0 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":76 FF92 text0 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":124 FF9E text3 CODE
+"F:\Spring 15\Embedded\Project\4534-08\src\uart\F46J50_UART_TB.X\main.c":77 FF9E text0 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":126 FFA2 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":127 FFA6 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":129 FFAA text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":130 FFAC text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":132 FFAE text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":134 FFB2 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":135 FFB4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":138 FFB6 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":139 FFB8 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":141 FFBA text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":142 FFBE text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":143 FFC2 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":144 FFC2 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":146 FFC4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":147 FFC6 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":149 FFC8 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":150 FFCA text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":154 FFCC text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":155 FFD0 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":156 FFD4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":157 FFD4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":159 FFD6 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":160 FFDA text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":161 FFDE text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":162 FFDE text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":164 FFE0 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":165 FFE4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":167 FFF2 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":168 FFF4 text3 CODE
+"E:\MPLAB\xc8\v1.30\sources\pic18\plib\USART\u1open.c":169 FFF6 text3 CODE
+# %SYMTAB Section
+# An enumeration of all symbols in the program.
+# The beginning of the section is indicated by %SYMTAB.
+# Each line describes a single symbol as follows:
+#    <label> <value> [-]<load-adj> <class> <space> <psect> <file-name>
+# The value and load-adj are both in unqualified hexadecimal.
+# All other numeric values are in decimal.  The load-adj is the
+# quantity one needs to add to the symbol value in order to obtain the load
+# address of the symbol.  This value may be signed. If the symbol
+# was defined in a psect then <psect> will be "-". File-name
+# is the name of the object file in which the symbol was defined.
+%SYMTAB
+__CFG_XINST$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__S0 10000 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__S1 B 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__S2 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_DSWDTPS$G2 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hintentry 0 0 ABS 0 intentry dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintentry 0 0 ABS 0 intentry dist/default/production\F46J50_UART_TB.X.production.obj
+_USART1_Status A 0 COMRAM 1 bssCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+_LATB F8A 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_main FF50 0 CODE 0 text0 dist/default/production\F46J50_UART_TB.X.production.obj
+___sp 0 0 STACK 2 stack C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+start 0 0 CODE 0 init C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+_TMR1H FCF 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_TMR1L FCE 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_TRISB F93 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hirdata 0 0 CODE 0 irdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lirdata 0 0 CODE 0 irdata dist/default/production\F46J50_UART_TB.X.production.obj
+__HRAM 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__LRAM 1 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_T1CON FCD 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+main@baud 9 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_WDTPS$32768 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hconfig 10000 0 CONFIG 0 config dist/default/production\F46J50_UART_TB.X.production.obj
+__Lconfig FFF8 0 CONFIG 0 config dist/default/production\F46J50_UART_TB.X.production.obj
+OpenTimer1@config 3 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+OpenTimer1@config1 1 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_RTCOSC$T1OSCREF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbigram 0 0 ABS 0 bigram dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbigram 0 0 ABS 0 bigram dist/default/production\F46J50_UART_TB.X.production.obj
+__Hrparam 0 0 ABS 0 rparam dist/default/production\F46J50_UART_TB.X.production.obj
+__Lrparam 0 0 ABS 0 rparam dist/default/production\F46J50_UART_TB.X.production.obj
+__Hram 0 0 ABS 0 ram dist/default/production\F46J50_UART_TB.X.production.obj
+__Lram 0 0 ABS 0 ram dist/default/production\F46J50_UART_TB.X.production.obj
+__Hcomram 0 0 ABS 0 comram dist/default/production\F46J50_UART_TB.X.production.obj
+__Lcomram 0 0 ABS 0 comram dist/default/production\F46J50_UART_TB.X.production.obj
+__Hsfr 0 0 ABS 0 sfr dist/default/production\F46J50_UART_TB.X.production.obj
+__Lsfr 0 0 ABS 0 sfr dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbss 0 0 RAM 1 bss dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbss 0 0 RAM 1 bss dist/default/production\F46J50_UART_TB.X.production.obj
+__Hnvrram 0 0 COMRAM 1 nvrram dist/default/production\F46J50_UART_TB.X.production.obj
+__Lnvrram 0 0 COMRAM 1 nvrram dist/default/production\F46J50_UART_TB.X.production.obj
+Write1USART@data 1 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+_RCSTA1 FAC 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+Open1USART@config 6 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+_TXREG1 FAE 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_SPBRG1 FB0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_TXSTA1 FAD 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_PIE1bits F9D 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_PIR1bits F9E 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_IPR1bits F9F 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hintsave_regs 0 0 BIGRAM 1 intsave_regs dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintsave_regs 0 0 BIGRAM 1 intsave_regs dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbigbss 0 0 BIGRAM 1 bigbss dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbigbss 0 0 BIGRAM 1 bigbss dist/default/production\F46J50_UART_TB.X.production.obj
+__Hintret 0 0 ABS 0 intret dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintret 0 0 ABS 0 intret dist/default/production\F46J50_UART_TB.X.production.obj
+__Hramtop F00 0 RAM 0 ramtop dist/default/production\F46J50_UART_TB.X.production.obj
+__Lramtop F00 0 RAM 0 ramtop dist/default/production\F46J50_UART_TB.X.production.obj
+__Hstruct 0 0 COMRAM 1 struct dist/default/production\F46J50_UART_TB.X.production.obj
+__Lstruct 0 0 COMRAM 1 struct dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbigdata 0 0 BIGRAM 1 bigdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbigdata 0 0 BIGRAM 1 bigdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Hmediumconst 0 0 MEDIUMCONST 0 mediumconst dist/default/production\F46J50_UART_TB.X.production.obj
+__Lmediumconst 0 0 MEDIUMCONST 0 mediumconst dist/default/production\F46J50_UART_TB.X.production.obj
+__Hfarbss 0 0 FARRAM 0 farbss dist/default/production\F46J50_UART_TB.X.production.obj
+__Lfarbss 0 0 FARRAM 0 farbss dist/default/production\F46J50_UART_TB.X.production.obj
+__Hintcode 0 0 CODE 0 intcode dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintcode 0 0 CODE 0 intcode dist/default/production\F46J50_UART_TB.X.production.obj
+__Hfardata 0 0 FARRAM 0 fardata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lfardata 0 0 FARRAM 0 fardata dist/default/production\F46J50_UART_TB.X.production.obj
+_T1GCON F9A 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_CPUDIV$OSC1 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_OSCCON FD3 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Habs1 0 0 ABS 0 abs1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Labs1 0 0 ABS 0 abs1 dist/default/production\F46J50_UART_TB.X.production.obj
+__HnvFARRAM 0 0 FARRAM 0 nvFARRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__LnvFARRAM 0 0 FARRAM 0 nvFARRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__Hdata 0 0 ABS 0 data dist/default/production\F46J50_UART_TB.X.production.obj
+__Ldata 0 0 ABS 0 data dist/default/production\F46J50_UART_TB.X.production.obj
+stackhi 9FF 0 ABS 0 - C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__Htemp 0 0 COMRAM 1 temp dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltemp 0 0 COMRAM 1 temp dist/default/production\F46J50_UART_TB.X.production.obj
+stacklo 60 0 ABS 0 - C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__Hrbit 0 0 COMRAM 1 rbit dist/default/production\F46J50_UART_TB.X.production.obj
+__Lrbit 0 0 COMRAM 1 rbit dist/default/production\F46J50_UART_TB.X.production.obj
+__Hinit 0 0 CODE 0 init dist/default/production\F46J50_UART_TB.X.production.obj
+__Linit 0 0 CODE 0 init dist/default/production\F46J50_UART_TB.X.production.obj
+__Hintcodelo 0 0 CODE 0 intcodelo dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintcodelo 0 0 CODE 0 intcodelo dist/default/production\F46J50_UART_TB.X.production.obj
+__Hrbss 0 0 COMRAM 1 rbss dist/default/production\F46J50_UART_TB.X.production.obj
+__end_of_main FF9E 0 CODE 0 text0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lrbss 0 0 COMRAM 1 rbss dist/default/production\F46J50_UART_TB.X.production.obj
+__Htext 0 0 ABS 0 text dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltext 0 0 ABS 0 text dist/default/production\F46J50_UART_TB.X.production.obj
+end_of_initialization FF02 0 CODE 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+_SPBRGH1 F7F 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_T1CONbits FCD 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_OpenTimer1 FF1C 0 CODE 0 text2 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hibigdata 0 0 CODE 0 ibigdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Libigdata 0 0 CODE 0 ibigdata dist/default/production\F46J50_UART_TB.X.production.obj
+__size_of_Write1USART 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_OSC$HSPLL 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hifardata 0 0 CODE 0 ifardata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lifardata 0 0 CODE 0 ifardata dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank0 0 0 ABS 0 bank0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank0 0 0 ABS 0 bank0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank1 0 0 ABS 0 bank1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank1 0 0 ABS 0 bank1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank2 0 0 ABS 0 bank2 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank2 0 0 ABS 0 bank2 dist/default/production\F46J50_UART_TB.X.production.obj
+__size_of_OpenTimer1 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank3 0 0 ABS 0 bank3 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank3 0 0 ABS 0 bank3 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank4 0 0 ABS 0 bank4 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank4 0 0 ABS 0 bank4 dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_MSSP7B_EN$MSK7 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank5 0 0 ABS 0 bank5 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank5 0 0 ABS 0 bank5 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hpowerup 0 0 CODE 0 powerup dist/default/production\F46J50_UART_TB.X.production.obj
+__Lpowerup 0 0 CODE 0 powerup dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank6 0 0 ABS 0 bank6 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank6 0 0 ABS 0 bank6 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank7 0 0 ABS 0 bank7 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank7 0 0 ABS 0 bank7 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank8 0 0 ABS 0 bank8 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank8 0 0 ABS 0 bank8 dist/default/production\F46J50_UART_TB.X.production.obj
+__Htext0 0 0 ABS 0 text0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltext0 0 0 ABS 0 text0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank9 0 0 ABS 0 bank9 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank9 0 0 ABS 0 bank9 dist/default/production\F46J50_UART_TB.X.production.obj
+__Htext1 0 0 ABS 0 text1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltext1 0 0 ABS 0 text1 dist/default/production\F46J50_UART_TB.X.production.obj
+__ptext0 FF50 0 CODE 0 text0 dist/default/production\F46J50_UART_TB.X.production.obj
+__Htext2 0 0 ABS 0 text2 dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltext2 0 0 ABS 0 text2 dist/default/production\F46J50_UART_TB.X.production.obj
+__ptext1 FF08 0 CODE 0 text1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Htext3 0 0 ABS 0 text3 dist/default/production\F46J50_UART_TB.X.production.obj
+__Ltext3 0 0 ABS 0 text3 dist/default/production\F46J50_UART_TB.X.production.obj
+__ptext2 FF1C 0 CODE 0 text2 dist/default/production\F46J50_UART_TB.X.production.obj
+__ptext3 FF9E 0 CODE 0 text3 dist/default/production\F46J50_UART_TB.X.production.obj
+__HbssCOMRAM 0 0 ABS 0 bssCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__LbssCOMRAM 0 0 ABS 0 bssCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__pbssCOMRAM A 0 COMRAM 1 bssCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__Hclrtext 0 0 ABS 0 clrtext dist/default/production\F46J50_UART_TB.X.production.obj
+__Lclrtext 0 0 ABS 0 clrtext dist/default/production\F46J50_UART_TB.X.production.obj
+_Open1USART FF9E 0 CODE 0 text3 dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_T1DIG$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_OSCTUNEbits F9B 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__end_of__initialization FF02 0 CODE 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_WPCFG$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hidata 0 0 CODE 0 idata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lidata 0 0 CODE 0 idata dist/default/production\F46J50_UART_TB.X.production.obj
+__Hrdata 0 0 COMRAM 1 rdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Lrdata 0 0 COMRAM 1 rdata dist/default/production\F46J50_UART_TB.X.production.obj
+__Hidloc 0 0 IDLOC 0 idloc dist/default/production\F46J50_UART_TB.X.production.obj
+__Lidloc 0 0 IDLOC 0 idloc dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_STVREN$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hstack 0 0 STACK 2 stack dist/default/production\F46J50_UART_TB.X.production.obj
+__Lstack 0 0 STACK 2 stack dist/default/production\F46J50_UART_TB.X.production.obj
+__Hparam 0 0 ABS 0 rparam dist/default/production\F46J50_UART_TB.X.production.obj
+__Lparam 0 0 ABS 0 rparam dist/default/production\F46J50_UART_TB.X.production.obj
+__HcstackCOMRAM 0 0 ABS 0 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__LcstackCOMRAM 0 0 ABS 0 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_IESO$ON 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__pcstackCOMRAM 1 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__Hsmallconst 0 0 SMALLCONST 0 smallconst dist/default/production\F46J50_UART_TB.X.production.obj
+__Lsmallconst 0 0 SMALLCONST 0 smallconst dist/default/production\F46J50_UART_TB.X.production.obj
+__Hnvbit 0 0 COMRAM 1 nvbit dist/default/production\F46J50_UART_TB.X.production.obj
+__Lnvbit 0 0 COMRAM 1 nvbit dist/default/production\F46J50_UART_TB.X.production.obj
+__Hcinit 0 0 ABS 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+__Lcinit 0 0 ABS 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+__pcinit FF00 0 CODE 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_DSBOREN$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__ramtop F00 0 RAM 0 ramtop C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__mediumconst 0 0 MEDIUMCONST 0 mediumconst C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__size_of_main 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hconst 0 0 CODE 0 const dist/default/production\F46J50_UART_TB.X.production.obj
+__Lconst 0 0 CODE 0 const dist/default/production\F46J50_UART_TB.X.production.obj
+__size_of_Open1USART 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+Open1USART@spbrg 1 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_DSWDTEN$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_WPEND$PAGE_WPFP 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank10 0 0 ABS 0 bank10 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank10 0 0 ABS 0 bank10 dist/default/production\F46J50_UART_TB.X.production.obj
+__end_of_Write1USART FF1C 0 CODE 0 text1 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank11 0 0 ABS 0 bank11 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank11 0 0 ABS 0 bank11 dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_FCMEN$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank12 0 0 ABS 0 bank12 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank12 0 0 ABS 0 bank12 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank13 0 0 ABS 0 bank13 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank13 0 0 ABS 0 bank13 dist/default/production\F46J50_UART_TB.X.production.obj
+__Hbank14 0 0 ABS 0 bank14 dist/default/production\F46J50_UART_TB.X.production.obj
+__Lbank14 0 0 ABS 0 bank14 dist/default/production\F46J50_UART_TB.X.production.obj
+__end_of_OpenTimer1 FF50 0 CODE 0 text2 dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_PLLDIV$3 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_IOL1WAY$ON 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_RCSTA1bits FAC 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_TXSTA1bits FAD 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+___inthi_sp 0 0 STACK 2 stack C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__CFG_WDTEN$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+___intlo_sp 0 0 STACK 2 stack C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+_T1GCONbits F9A 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+_INTCONbits FF2 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hend_init 4 0 CODE 0 end_init dist/default/production\F46J50_UART_TB.X.production.obj
+__Lend_init 0 0 CODE 0 end_init dist/default/production\F46J50_UART_TB.X.production.obj
+__Hjflash_buffer F800 0 CODE 0 jflash_buffer dist/default/production\F46J50_UART_TB.X.production.obj
+__Ljflash_buffer F800 0 CODE 0 jflash_buffer dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_CP0$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__smallconst 0 0 SMALLCONST 0 smallconst C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__CFG_WPFP$PAGE_63 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__Hreset_vec 0 0 CODE 0 reset_vec dist/default/production\F46J50_UART_TB.X.production.obj
+__Lreset_vec 0 0 CODE 0 reset_vec dist/default/production\F46J50_UART_TB.X.production.obj
+__accesstop 60 0 ABS 0 - C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__Hintcode_body 0 0 ABS 0 intcode_body dist/default/production\F46J50_UART_TB.X.production.obj
+__Lintcode_body 0 0 ABS 0 intcode_body dist/default/production\F46J50_UART_TB.X.production.obj
+intlevel0 0 0 CODE 0 text C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+intlevel1 0 0 CODE 0 text C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__CFG_WPDIS$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+intlevel2 0 0 CODE 0 text C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+intlevel3 0 0 CODE 0 text C:\Users\Escher\AppData\Local\Temp\s1dag.obj
+__CFG_DSWDTOSC$T1OSCREF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+start_initialization FF00 0 CODE 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+__end_of_Open1USART FFF8 0 CODE 0 text3 dist/default/production\F46J50_UART_TB.X.production.obj
+__initialization FF00 0 CODE 0 cinit dist/default/production\F46J50_UART_TB.X.production.obj
+_Write1USART FF08 0 CODE 0 text1 dist/default/production\F46J50_UART_TB.X.production.obj
+__CFG_LPT1OSC$OFF 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+__activetblptr 0 0 ABS 0 - dist/default/production\F46J50_UART_TB.X.production.obj
+main@UARTConfig 8 0 COMRAM 1 cstackCOMRAM dist/default/production\F46J50_UART_TB.X.production.obj
+# %SPLITSTAB Section
+# This section enumerates all the psect splits performed by the assembler.
+# The beginning of the section is indicated by %SPLITSTAB.
+# Each line is a record a particular split, where the parent psect in on
+# the left and the child on the right.  Note that a child psect is always
+# split form the top of the parent psect. All splits from a given parent
+# are listed in the order in which they occurred.
+%SPLITSTAB
+# %DABS Section
+# This section contains a table of all usuage of the assember
+# directive DABS in the program. Each line has the following format:
+#   <name> <space> <address> <size>
+# If the DABS was originally labelled then that shall be <name>,
+# otherwise name will be "-".  The <space> number is in decimal.
+# <address> and <size> are in byte units as unqaulified hexadecimal
+%DABS
+# %SEGMENTS Section
+# This sections enumerates the segments of the program.  Each segment
+# is described on a single line as follows:
+#    <name> <space> <link address> <file address> <size> <delta>
+# Addresses and size are in unqualified hexadecimal.  The link address
+# and size are in units of delta. The file address is in units of bytes.
+# All other numeric quantities are in decimal.
+%SEGMENTS
+reset_vec 0 0 0 4 1
+config 0 FFF8 FFF8 8 1
+cstackCOMRAM 1 1 1 A 1
+text3 0 FF9E FF9E 5A 1
+text0 0 FF50 FF50 4E 1
+text2 0 FF1C FF1C 34 1
+text1 0 FF08 FF08 14 1
+cinit 0 FF00 FF00 8 1
