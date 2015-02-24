@@ -1,11 +1,9 @@
 Version 3.2 HI-TECH Software Intermediate Code
 "1 src/timer1_thread.h
-[s S584 `ui 1 ]
-[n S584 __timer1_thread_struct msgcount ]
+[s S584 `ui 1 `uc -> 128 `i ]
+[n S584 __timer1_thread_struct msgcount buffer ]
 "238 E:\MPLAB\xc8\v1.30\include\plib\timers.h
 [v _ReadTimer1 `(ui ~T0 @X0 0 ef ]
-"57 src/messages.h
-[v _ToMainLow_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
 [; ;htc.h: 22: extern void __builtin_software_breakpoint(void);
 [; ;pic18f45j10.h: 44: extern volatile unsigned char PORTA @ 0xF80;
 "46 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
@@ -4631,9 +4629,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;messages.h: 79: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;timer1_thread.h: 1: typedef struct __timer1_thread_struct {
 [; ;timer1_thread.h: 3: unsigned int msgcount;
-[; ;timer1_thread.h: 4: } timer1_thread_struct;
-[; ;timer1_thread.h: 6: void init_timer1_lthread(timer1_thread_struct *);
-[; ;timer1_thread.h: 7: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
+[; ;timer1_thread.h: 4: unsigned char buffer[128];
+[; ;timer1_thread.h: 5: } timer1_thread_struct;
+[; ;timer1_thread.h: 7: void init_timer1_lthread(timer1_thread_struct *);
+[; ;timer1_thread.h: 8: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
 "6 src/timer1_thread.c
 [v _init_timer1_lthread `(v ~T0 @X0 1 ef1`*S584 ]
 {
@@ -4644,110 +4643,116 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer1_thread.c: 7: tptr->msgcount = 0;
 "7
 [e = . *U _tptr 0 -> -> 0 `i `ui ]
-[; ;timer1_thread.c: 8: }
+[; ;timer1_thread.c: 8: tptr->buffer[0] = 0x02;
 "8
+[e = *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 2 `i `uc ]
+[; ;timer1_thread.c: 9: tptr->buffer[1] = 0xC8;
+"9
+[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 200 `i `uc ]
+[; ;timer1_thread.c: 10: tptr->buffer[2] = 0x4B;
+"10
+[e = *U + &U . *U _tptr 1 * -> -> -> 2 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 75 `i `uc ]
+[; ;timer1_thread.c: 12: }
+"12
 [e :UE 585 ]
 }
-"14
+"18
 [v _timer1_lthread `(i ~T0 @X0 1 ef4`*S584`i`i`*uc ]
 {
-[; ;timer1_thread.c: 14: int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
+[; ;timer1_thread.c: 18: int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
 [e :U _timer1_lthread ]
 [v _tptr `*S584 ~T0 @X0 1 r1 ]
 [v _msgtype `i ~T0 @X0 1 r2 ]
 [v _length `i ~T0 @X0 1 r3 ]
 [v _msgbuffer `*uc ~T0 @X0 1 r4 ]
 [f ]
-"15
+"19
 [v _retval `c ~T0 @X0 1 a ]
-[v F5129 `uc ~T0 @X0 -> 2 `i s ]
-[i F5129
-:U ..
-"17
--> -> 200 `i `uc
--> -> 72 `i `uc
-..
-]
-[v _ctrl `uc ~T0 @X0 -> 2 `i a ]
-[; ;timer1_thread.c: 15: signed char retval;
-[; ;timer1_thread.c: 17: unsigned char ctrl[2] = {200,72};
-[e = _ctrl F5129 ]
-"18
+"21
 [v _even `i ~T0 @X0 1 a ]
-[; ;timer1_thread.c: 18: int even = 0;
+[; ;timer1_thread.c: 19: signed char retval;
+[; ;timer1_thread.c: 21: int even = 0;
 [e = _even -> 0 `i ]
-[; ;timer1_thread.c: 20: tptr->msgcount++;
-"20
+[; ;timer1_thread.c: 23: tptr->msgcount++;
+"23
 [e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 22: if ((tptr->msgcount % 6) == 5) {
-"22
+[; ;timer1_thread.c: 25: if ((tptr->msgcount % 6) == 5) {
+"25
 [e $ ! == % . *U _tptr 0 -> -> 6 `i `ui -> -> 5 `i `ui 587  ]
 {
-[; ;timer1_thread.c: 27: if(ReadTimer1()%2 == 0) even = 0;
-"27
+[; ;timer1_thread.c: 26: if(ReadTimer1()%2 == 0) even = 0;
+"26
 [e $ ! == % ( _ReadTimer1 ..  -> -> 2 `i `ui -> -> 0 `i `ui 588  ]
 [e = _even -> 0 `i ]
 [e $U 589  ]
-"28
+"27
 [e :U 588 ]
-[; ;timer1_thread.c: 28: else even = 1;
+[; ;timer1_thread.c: 27: else even = 1;
 [e = _even -> 1 `i ]
 [e :U 589 ]
-[; ;timer1_thread.c: 29: switch(even){
-"29
+[; ;timer1_thread.c: 28: switch(even){
+"28
 [e $U 591  ]
 {
-[; ;timer1_thread.c: 30: case 0:
-"30
-[e :U 592 ]
-[; ;timer1_thread.c: 31: ctrl[0] = 0;
-"31
-[e = *U + &U _ctrl * -> -> -> 0 `i `ui `ux -> -> # *U &U _ctrl `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 32: ctrl[1] = 0;
-"32
-[e = *U + &U _ctrl * -> -> -> 1 `i `ui `ux -> -> # *U &U _ctrl `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 33: break;
-"33
-[e $U 590  ]
-[; ;timer1_thread.c: 34: case 1:
-"34
-[e :U 593 ]
-[; ;timer1_thread.c: 35: ctrl[0] = 200;
-"35
-[e = *U + &U _ctrl * -> -> -> 0 `i `ui `ux -> -> # *U &U _ctrl `ui `ux -> -> 200 `i `uc ]
-[; ;timer1_thread.c: 36: ctrl[1] = 72;
-"36
-[e = *U + &U _ctrl * -> -> -> 1 `i `ui `ux -> -> # *U &U _ctrl `ui `ux -> -> 72 `i `uc ]
-[; ;timer1_thread.c: 37: break;
-"37
-[e $U 590  ]
-"38
-}
-[; ;timer1_thread.c: 38: }
-[e $U 590  ]
+[; ;timer1_thread.c: 29: case 0:
 "29
+[e :U 592 ]
+[; ;timer1_thread.c: 30: tptr->buffer[1] = 0x00;
+"30
+[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 31: tptr->buffer[2] = 0x00;
+"31
+[e = *U + &U . *U _tptr 1 * -> -> -> 2 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 32: break;
+"32
+[e $U 590  ]
+[; ;timer1_thread.c: 33: case 1:
+"33
+[e :U 593 ]
+[; ;timer1_thread.c: 34: tptr->buffer[1] = 0xC8;
+"34
+[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 200 `i `uc ]
+[; ;timer1_thread.c: 35: tptr->buffer[2] = 0x4B;
+"35
+[e = *U + &U . *U _tptr 1 * -> -> -> 2 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 75 `i `uc ]
+[; ;timer1_thread.c: 36: break;
+"36
+[e $U 590  ]
+"37
+}
+[; ;timer1_thread.c: 37: }
+[e $U 590  ]
+"28
 [e :U 591 ]
 [e [\ _even , $ -> 0 `i 592
  , $ -> 1 `i 593
  590 ]
-"38
+"37
 [e :U 590 ]
-[; ;timer1_thread.c: 40: retval = ToMainLow_sendmsg(sizeof (tptr->msgcount), 31, (void *) &ctrl);
+[; ;timer1_thread.c: 38: tptr->buffer[0] = 0x02;
+"38
+[e = *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 2 `i `uc ]
 "40
-[e = _retval ( _ToMainLow_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 31 `i `uc -> &U _ctrl `*v ]
-[; ;timer1_thread.c: 41: if (retval < 0) {
-"41
+[v _x `i ~T0 @X0 1 a ]
+[; ;timer1_thread.c: 40: int x = tptr->buffer[0], y = tptr->buffer[1], z = tptr->buffer[2];
+[e = _x -> *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux `i ]
+[v _y `i ~T0 @X0 1 a ]
+[e = _y -> *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux `i ]
+[v _z `i ~T0 @X0 1 a ]
+[e = _z -> *U + &U . *U _tptr 1 * -> -> -> 2 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux `i ]
+[; ;timer1_thread.c: 43: if (retval < 0) {
+"43
 [e $ ! < -> _retval `i -> 0 `i 594  ]
 {
-"43
+"45
 }
 [e :U 594 ]
-"50
+"46
 }
 [e :U 587 ]
-[; ;timer1_thread.c: 43: }
-[; ;timer1_thread.c: 50: }
-[; ;timer1_thread.c: 51: }
-"51
+[; ;timer1_thread.c: 45: }
+[; ;timer1_thread.c: 46: }
+[; ;timer1_thread.c: 47: }
+"47
 [e :UE 586 ]
 }

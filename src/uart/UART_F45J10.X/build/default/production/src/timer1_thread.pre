@@ -6012,6 +6012,7 @@ signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 typedef struct __timer1_thread_struct {
 
 unsigned int msgcount;
+unsigned char buffer[128];
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);
@@ -6020,40 +6021,40 @@ int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
 # 6 "src/timer1_thread.c"
 void init_timer1_lthread(timer1_thread_struct *tptr) {
 tptr->msgcount = 0;
+tptr->buffer[0] = 0x02;
+tptr->buffer[1] = 0xC8;
+tptr->buffer[2] = 0x4B;
+
 }
 
-# 14
+# 18
 int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
 signed char retval;
 
-unsigned char ctrl[2] = {200,72};
 int even = 0;
 
 tptr->msgcount++;
 
 if ((tptr->msgcount % 6) == 5) {
-
-
-
-
 if(ReadTimer1()%2 == 0) even = 0;
 else even = 1;
 switch(even){
 case 0:
-ctrl[0] = 0;
-ctrl[1] = 0;
+tptr->buffer[1] = 0x00;
+tptr->buffer[2] = 0x00;
 break;
 case 1:
-ctrl[0] = 200;
-ctrl[1] = 72;
+tptr->buffer[1] = 0xC8;
+tptr->buffer[2] = 0x4B;
 break;
 }
+tptr->buffer[0] = 0x02;
 
-retval = ToMainLow_sendmsg(sizeof (tptr->msgcount), 31, (void *) &ctrl);
+int x = tptr->buffer[0], y = tptr->buffer[1], z = tptr->buffer[2];
+
+
 if (retval < 0) {
 
 }
-
-# 50
 }
 }

@@ -5957,6 +5957,7 @@ unsigned char buflen;
 } uart_comm;
 
 void init_uart_recv(uart_comm *);
+void uart_trans_int_handler(void);
 void uart_recv_int_handler(void);
 
 # 7 "src/my_i2c.h"
@@ -6004,7 +6005,6 @@ unsigned int result;
 
 # 44
 result = ReadTimer1();
-
 ToMainLow_sendmsg(0, 11, (void *) 0);
 
 

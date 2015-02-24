@@ -5,6 +5,9 @@
 
 void init_timer1_lthread(timer1_thread_struct *tptr) {
     tptr->msgcount = 0;
+    tptr->buffer[0] = 0xC8;
+    tptr->buffer[1] = 0x4B;
+
 }
 
 // This is a "logical" thread that processes messages from TIMER1
@@ -14,7 +17,6 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
 int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
     signed char retval;
 
-    unsigned char ctrl[2] = {200,72};
     int even = 0;
 
     tptr->msgcount++;
@@ -24,16 +26,16 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
         else even = 1;
         switch(even){
             case 0:
-                ctrl[0] = 0;
-                ctrl[1] = 0;
+                tptr->buffer[0] = 0x00;
+                tptr->buffer[1] = 0x00;
                 break;
             case 1:
-                ctrl[0] = 200;
-                ctrl[1] = 72;
+                tptr->buffer[0] = 0xC8;
+                tptr->buffer[1] = 0x4B;
                 break;
         }
-        
-        retval = ToMainLow_sendmsg(sizeof (tptr->msgcount), MSGT_UART_TX, (void *) &ctrl);
+
+        retval = ToMainLow_sendmsg(2, MSGT_UART_TX, (void *)tptr->buffer);
         if (retval < 0) {
             // We would handle the error here
         }

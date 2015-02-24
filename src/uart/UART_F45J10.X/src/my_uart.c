@@ -8,6 +8,32 @@
 
 static uart_comm *uc_ptr;
 
+void uart_trans_int_handler() {
+    // Check the low priority queue
+    unsigned char* data = NULL;
+    unsigned char msgtype;
+    unsigned char curIndex;
+    signed char length = FromMainLow_recvmsg(MSGLEN, &msgtype, (void *) data);
+    if (length < 0) {
+        // no message, check the error code to see if it is concern
+        if (length != MSGQUEUE_EMPTY) {
+            // This will be populated when we implement error-checking
+        }
+        else{
+            // This will be populated when we implement error-checking
+        }
+    } else {
+        curIndex = 0;
+        while(curIndex < length){
+            while(BusyUSART());
+            TXREG = data[curIndex];
+            curIndex++;
+        }
+    }
+
+    PIE1bits.TXIE = 0;
+}
+
 void uart_recv_int_handler() {
 #ifdef __USE18F26J50
     if (DataRdy1USART()) {

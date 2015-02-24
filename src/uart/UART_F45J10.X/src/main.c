@@ -229,6 +229,10 @@ void main(void) {
 
     // init the timer1 lthread
     init_timer1_lthread(&t1thread_data);
+    
+    // init the UART lthread
+    init_uart_lthread(&uthread_data);
+
 
     // initialize message queues before enabling any interrupts
     init_queues();
@@ -261,12 +265,29 @@ void main(void) {
 #endif
 #endif
 
+// configure the hardware USART device
+#ifdef __USE18F26J50
+    Open1USART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT &
+        USART_CONT_RX & USART_BRGH_LOW, 0x19);
+#else
+#ifdef __USE18F46J50
+    Open1USART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT &
+        USART_CONT_RX & USART_BRGH_LOW, 0x19);
+#else
+    UARTConfig = USART_TX_INT_ON & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_BRGH_HIGH ;
+    baud = 77;
+    OpenUSART(UARTConfig,baud);
+#endif
+#endif
+
     // Decide on the priority of the enabled peripheral interrupts
     // 0 is low, 1 is high
     // Timer1 interrupt
     IPR1bits.TMR1IP = 0;
-    // USART RX interrupt
+    // USART RC interrupt
     IPR1bits.RCIP = 0;
+    // USART TX interrupt
+    IPR1bits.TXIP = 0;
     // I2C interrupt
     IPR1bits.SSPIP = 1;
 
@@ -293,21 +314,6 @@ void main(void) {
 
     // must specifically enable the I2C interrupts
     PIE1bits.SSPIE = 1;
-
-    // configure the hardware USART device
-#ifdef __USE18F26J50
-    Open1USART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT &
-        USART_CONT_RX & USART_BRGH_LOW, 0x19);
-#else
-#ifdef __USE18F46J50
-    Open1USART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT &
-        USART_CONT_RX & USART_BRGH_LOW, 0x19);
-#else
-    UARTConfig = USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT & USART_BRGH_HIGH ;
-    baud = 77;
-    OpenUSART(UARTConfig,baud);
-#endif
-#endif
 
     // Peripheral interrupts can have their priority set to high or low
     // enable high-priority interrupts and low-priority interrupts
@@ -420,10 +426,6 @@ void main(void) {
                 };
                 case MSGT_OVERRUN:
                 case MSGT_UART_TX:
-                {
-                    uart_lthread(&uthread_data, msgtype, length, msgbuffer);
-                    break;
-                };
                 case MSGT_UART_RC:
                 {
                     uart_lthread(&uthread_data, msgtype, length, msgbuffer);

@@ -47,8 +47,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _SleepIfOkay `(v ~T0 @X0 0 ef ]
 "12 src/user_interrupts.h
 [v _timer1_int_handler `(v ~T0 @X0 0 ef ]
-"16 src/my_uart.h
+"17 src/my_uart.h
 [v _uart_recv_int_handler `(v ~T0 @X0 0 ef ]
+[s S220 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S220 . TMR1IE TMR2IE CCP1IE SSP1IE TXIE RCIE ADIE PSPIE ]
+[s S221 :3 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S221 . . SSPIE TX1IE RC1IE ]
+[u S219 `S220 1 `S221 1 ]
+[n S219 . . . ]
+"3591 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
+[v _PIE1bits `VS219 ~T0 @X0 0 e@3997 ]
+"16 src/my_uart.h
+[v _uart_trans_int_handler `(v ~T0 @X0 0 ef ]
 [; ;htc.h: 22: extern void __builtin_software_breakpoint(void);
 [; ;pic18f45j10.h: 44: extern volatile unsigned char PORTA @ 0xF80;
 "46 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
@@ -4654,7 +4664,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.h: 12: unsigned char buflen;
 [; ;my_uart.h: 13: } uart_comm;
 [; ;my_uart.h: 15: void init_uart_recv(uart_comm *);
-[; ;my_uart.h: 16: void uart_recv_int_handler(void);
+[; ;my_uart.h: 16: void uart_trans_int_handler(void);
+[; ;my_uart.h: 17: void uart_recv_int_handler(void);
 [; ;my_i2c.h: 7: typedef struct __i2c_comm {
 [; ;my_i2c.h: 8: unsigned char buffer[10];
 [; ;my_i2c.h: 9: unsigned char buflen;
@@ -4797,9 +4808,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "46
 [e :UE 593 ]
 }
-[v F5103 `(v ~T0 @X0 1 tf ]
+[v F5105 `(v ~T0 @X0 1 tf ]
 "83
-[v _InterruptHandlerHigh `IF5103 ~T0 @X0 1 e ]
+[v _InterruptHandlerHigh `IF5105 ~T0 @X0 1 e ]
 {
 [; ;interrupts.c: 78: interrupt
 [; ;interrupts.c: 83: void InterruptHandlerHigh() {
@@ -4840,9 +4851,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "110
 [e :UE 596 ]
 }
-[v F5105 `(v ~T0 @X0 1 tf ]
+[v F5107 `(v ~T0 @X0 1 tf ]
 "122
-[v _InterruptHandlerLow `ILF5105 ~T0 @X0 1 e ]
+[v _InterruptHandlerLow `ILF5107 ~T0 @X0 1 e ]
 {
 [; ;interrupts.c: 117: interrupt low_priority
 [; ;interrupts.c: 122: void InterruptHandlerLow() {
@@ -4876,12 +4887,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 601 ]
 [; ;interrupts.c: 133: }
-[; ;interrupts.c: 136: if (PIR1bits.TXIF) {
+[; ;interrupts.c: 136: if (PIR1bits.TXIF && PIE1bits.TXIE) {
 "136
-[e $ ! != -> . . _PIR1bits 0 4 `i -> -> -> 0 `i `Vuc `i 602  ]
+[e $ ! && != -> . . _PIR1bits 0 4 `i -> -> -> 0 `i `Vuc `i != -> . . _PIE1bits 0 4 `i -> -> -> 0 `i `Vuc `i 602  ]
 {
-[; ;interrupts.c: 137: PIR1bits.TXIF = 0;
+[; ;interrupts.c: 137: uart_trans_int_handler();
 "137
+[e ( _uart_trans_int_handler ..  ]
+[; ;interrupts.c: 138: PIR1bits.TXIF = 0;
+"138
 [e = . . _PIR1bits 0 4 -> -> 0 `i `uc ]
 "139
 }

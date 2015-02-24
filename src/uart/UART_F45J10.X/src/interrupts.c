@@ -133,9 +133,9 @@ void InterruptHandlerLow() {
     }
 
     // check to see if we have an interrupt on USART TX
-    if (PIR1bits.TXIF) {
-        PIR1bits.TXIF = 0; //clear interrupt flag
-        //uart_trans_int_handler();
+    if (PIR1bits.TXIF && PIE1bits.TXIE) {
+        uart_trans_int_handler();
+        PIR1bits.TXIF = 0;
     }
 }
 

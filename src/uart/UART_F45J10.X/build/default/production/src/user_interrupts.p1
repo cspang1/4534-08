@@ -4611,7 +4611,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.h: 12: unsigned char buflen;
 [; ;my_uart.h: 13: } uart_comm;
 [; ;my_uart.h: 15: void init_uart_recv(uart_comm *);
-[; ;my_uart.h: 16: void uart_recv_int_handler(void);
+[; ;my_uart.h: 16: void uart_trans_int_handler(void);
+[; ;my_uart.h: 17: void uart_recv_int_handler(void);
 [; ;my_i2c.h: 7: typedef struct __i2c_comm {
 [; ;my_i2c.h: 8: unsigned char buffer[10];
 [; ;my_i2c.h: 9: unsigned char buflen;
@@ -4677,13 +4678,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;user_interrupts.c: 44: result = ReadTimer1();
 "44
 [e = _result ( _ReadTimer1 ..  ]
-[; ;user_interrupts.c: 46: ToMainLow_sendmsg(0, 11, (void *) 0);
-"46
+[; ;user_interrupts.c: 45: ToMainLow_sendmsg(0, 11, (void *) 0);
+"45
 [e ( _ToMainLow_sendmsg (3 , , -> -> 0 `i `uc -> -> 11 `i `uc -> -> 0 `i `*v ]
-[; ;user_interrupts.c: 49: WriteTimer1(0);
-"49
+[; ;user_interrupts.c: 48: WriteTimer1(0);
+"48
 [e ( _WriteTimer1 (1 -> -> 0 `i `ui ]
-[; ;user_interrupts.c: 50: }
-"50
+[; ;user_interrupts.c: 49: }
+"49
 [e :UE 587 ]
 }

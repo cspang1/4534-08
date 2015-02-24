@@ -6027,6 +6027,7 @@ unsigned char buflen;
 } uart_comm;
 
 void init_uart_recv(uart_comm *);
+void uart_trans_int_handler(void);
 void uart_recv_int_handler(void);
 
 # 7 "src/my_i2c.h"
@@ -6055,15 +6056,17 @@ unsigned char i2c_master_recv(unsigned char);
 # 1 "src/uart_thread.h"
 typedef struct __uart_thread_struct {
 
-int data;
+unsigned char data[10];
 } uart_thread_struct;
 
+void init_uart_lthread(uart_thread_struct *);
 int uart_lthread(uart_thread_struct *,int,int,unsigned char*);
 
 # 1 "src/timer1_thread.h"
 typedef struct __timer1_thread_struct {
 
 unsigned int msgcount;
+unsigned char buffer[10];
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);
@@ -6132,6 +6135,10 @@ init_i2c(&ic);
 init_timer1_lthread(&t1thread_data);
 
 
+init_uart_lthread(&uthread_data);
+
+
+
 init_queues();
 
 
@@ -6151,40 +6158,41 @@ TRISA = 0x00;
 
 OpenTimer0(0b11111111 & 0b10111111 & 0b11011111 & 0b11110110);
 
-# 260
+# 264
 OpenTimer1(0b11111111 & 0b11111111 & 0b11111111 & 0b11111101 & 0b11110111 & 0b11111111);
 
-# 267
+# 277
+UARTConfig = 0b11111111 & 0b11111111 & 0b11111110 & 0b11111101 & 0b11111111 ;
+baud = 77;
+OpenUSART(UARTConfig,baud);
+
+# 286
 IPR1bits.TMR1IP = 0;
 
 IPR1bits.RCIP = 0;
 
-
+IPR1bits.TXIP = 0;
 
 IPR1bits.SSPIP = 1;
 
-# 282
+# 301
 i2c_configure_slave(0x9E);
 
-# 297
+# 316
 PIE1bits.SSPIE = 1;
 
-# 308
-UARTConfig = 0b01111111 & 0b11111111 & 0b11111110 & 0b11111101 & 0b11111111 ;
-baud = 77;
-OpenUSART(UARTConfig,baud);
 
-# 316
+
 enable_interrupts();
 
-# 336
+# 340
 while (1) {
 
 
 
 block_on_To_msgqueues();
 
-# 347
+# 351
 length = ToMainHigh_recvmsg(10, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -6209,7 +6217,7 @@ break;
 case 42:
 {
 
-# 377
+# 381
 switch (last_reg_recvd) {
 case 0xaa:
 {
@@ -6258,10 +6266,6 @@ break;
 };
 case 30:
 case 31:
-{
-uart_lthread(&uthread_data, msgtype, length, msgbuffer);
-break;
-};
 case 32:
 {
 uart_lthread(&uthread_data, msgtype, length, msgbuffer);

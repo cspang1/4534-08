@@ -2,13 +2,39 @@ Version 3.2 HI-TECH Software Intermediate Code
 "10 src/my_uart.h
 [s S583 `uc -> 4 `i `uc 1 ]
 [n S583 __uart_comm buffer buflen ]
+"72 src/messages.h
+[v _FromMainLow_recvmsg `(c ~T0 @X0 0 ef3`uc`*uc`*v ]
+"4704 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
+[v _TXREG `Vuc ~T0 @X0 0 e@4013 ]
+[s S262 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S262 . TX9D TRMT BRGH SENDB SYNC TXEN TX9 CSRC ]
+[s S263 :1 `uc 1 :5 `uc 1 :1 `uc 1 ]
+[n S263 . TXD8 . TX8_9 ]
+[s S264 :6 `uc 1 :1 `uc 1 ]
+[n S264 . . NOT_TX8 ]
+[s S265 :6 `uc 1 :1 `uc 1 ]
+[n S265 . . nTX8 ]
+[s S266 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S266 . TX9D1 TRMT1 BRGH1 SENDB1 SYNC1 TXEN1 TX91 CSRC1 ]
+[u S261 `S262 1 `S263 1 `S264 1 `S265 1 `S266 1 ]
+[n S261 . . . . . . ]
+"4462
+[v _TXSTAbits `VS261 ~T0 @X0 0 e@4012 ]
+[s S220 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S220 . TMR1IE TMR2IE CCP1IE SSP1IE TXIE RCIE ADIE PSPIE ]
+[s S221 :3 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S221 . . SSPIE TX1IE RC1IE ]
+[u S219 `S220 1 `S221 1 ]
+[n S219 . . . ]
+"3591
+[v _PIE1bits `VS219 ~T0 @X0 0 e@3997 ]
 [s S223 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S223 . TMR1IF TMR2IF CCP1IF SSP1IF TXIF RCIF ADIF PSPIF ]
 [s S224 :3 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S224 . . SSPIF TX1IF RC1IF ]
 [u S222 `S223 1 `S224 1 ]
 [n S222 . . . ]
-"3673 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
+"3673
 [v _PIR1bits `VS222 ~T0 @X0 0 e@3998 ]
 "596 E:\MPLAB\xc8\v1.30\include\plib\usart.h
 [v _ReadUSART `(uc ~T0 @X0 0 ef ]
@@ -4637,79 +4663,186 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.h: 12: unsigned char buflen;
 [; ;my_uart.h: 13: } uart_comm;
 [; ;my_uart.h: 15: void init_uart_recv(uart_comm *);
-[; ;my_uart.h: 16: void uart_recv_int_handler(void);
+[; ;my_uart.h: 16: void uart_trans_int_handler(void);
+[; ;my_uart.h: 17: void uart_recv_int_handler(void);
 "9 src/my_uart.c
 [v _uc_ptr `*S583 ~T0 @X0 1 s ]
 [; ;my_uart.c: 9: static uart_comm *uc_ptr;
 "11
-[v _uart_recv_int_handler `(v ~T0 @X0 1 ef ]
+[v _uart_trans_int_handler `(v ~T0 @X0 1 ef ]
 {
-[; ;my_uart.c: 11: void uart_recv_int_handler() {
-[e :U _uart_recv_int_handler ]
+[; ;my_uart.c: 11: void uart_trans_int_handler() {
+[e :U _uart_trans_int_handler ]
 [f ]
-[; ;my_uart.c: 20: if ((PIR1bits.RCIF)) {
-"20
-[e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 585  ]
+"13
+[v _data `*uc ~T0 @X0 1 a ]
+[; ;my_uart.c: 13: unsigned char* data = (0);
+[e = _data -> -> 0 `i `*uc ]
+"14
+[v _buffer `uc ~T0 @X0 -> 128 `i a ]
+"15
+[v _msgtype `uc ~T0 @X0 1 a ]
+"16
+[v _numBytes `uc ~T0 @X0 1 a ]
+[v _curIndex `uc ~T0 @X0 1 a ]
+"17
+[v _length `c ~T0 @X0 1 a ]
+[; ;my_uart.c: 14: unsigned char buffer[128];
+[; ;my_uart.c: 15: unsigned char msgtype;
+[; ;my_uart.c: 16: unsigned char numBytes, curIndex;
+[; ;my_uart.c: 17: signed char length = FromMainLow_recvmsg(10, &msgtype, (void *) data);
+[e = _length ( _FromMainLow_recvmsg (3 , , -> -> 10 `i `uc &U _msgtype -> _data `*v ]
+"18
+[v _l `i ~T0 @X0 1 a ]
+[; ;my_uart.c: 18: int l = data[0], m = data[1], n = data[2];
+[e = _l -> *U + _data * -> -> 0 `i `x -> -> # *U _data `i `x `i ]
+[v _m `i ~T0 @X0 1 a ]
+[e = _m -> *U + _data * -> -> 1 `i `x -> -> # *U _data `i `x `i ]
+[v _n `i ~T0 @X0 1 a ]
+[e = _n -> *U + _data * -> -> 2 `i `x -> -> # *U _data `i `x `i ]
+[; ;my_uart.c: 19: if (length < 0) {
+"19
+[e $ ! < -> _length `i -> 0 `i 585  ]
 {
-[; ;my_uart.c: 21: uc_ptr->buffer[uc_ptr->buflen] = ReadUSART();
+[; ;my_uart.c: 21: if (length != -4) {
 "21
-[e = *U + &U . *U _uc_ptr 0 * -> . *U _uc_ptr 1 `ux -> -> # *U &U . *U _uc_ptr 0 `ui `ux ( _ReadUSART ..  ]
-[; ;my_uart.c: 25: uc_ptr->buflen++;
-"25
-[e ++ . *U _uc_ptr 1 -> -> 1 `i `uc ]
-[; ;my_uart.c: 27: if (uc_ptr->buflen == 4) {
-"27
-[e $ ! == -> . *U _uc_ptr 1 `i -> 4 `i 586  ]
+[e $ ! != -> _length `i -U -> 4 `i 586  ]
 {
-[; ;my_uart.c: 28: ToMainLow_sendmsg(uc_ptr->buflen, 32, (void *) uc_ptr->buffer);
-"28
-[e ( _ToMainLow_sendmsg (3 , , . *U _uc_ptr 1 -> -> 32 `i `uc -> &U . *U _uc_ptr 0 `*v ]
-[; ;my_uart.c: 29: uc_ptr->buflen = 0;
-"29
-[e = . *U _uc_ptr 1 -> -> 0 `i `uc ]
-"30
+[; ;my_uart.c: 22: TXREG = 'Q';
+"22
+[e = _TXREG -> -> 81 `ui `uc ]
+"23
 }
+[; ;my_uart.c: 23: }
+[e $U 587  ]
+"24
 [e :U 586 ]
-"31
-}
-[e :U 585 ]
-[; ;my_uart.c: 30: }
-[; ;my_uart.c: 31: }
-[; ;my_uart.c: 38: if (USART_Status.OVERRUN_ERROR == 1) {
-"38
-[e $ ! == -> . . _USART_Status 1 3 `i -> 1 `i 587  ]
+[; ;my_uart.c: 24: else{
 {
-[; ;my_uart.c: 43: RCSTAbits.CREN = 0;
-"43
-[e = . . _RCSTAbits 0 4 -> -> 0 `i `uc ]
-[; ;my_uart.c: 44: RCSTAbits.CREN = 1;
-"44
-[e = . . _RCSTAbits 0 4 -> -> 1 `i `uc ]
-[; ;my_uart.c: 45: ToMainLow_sendmsg(0, 30, (void *) 0);
-"45
-[e ( _ToMainLow_sendmsg (3 , , -> -> 0 `i `uc -> -> 30 `i `uc -> -> 0 `i `*v ]
-"46
+[; ;my_uart.c: 25: TXREG = 'X';
+"25
+[e = _TXREG -> -> 88 `ui `uc ]
+"26
 }
 [e :U 587 ]
-[; ;my_uart.c: 46: }
-[; ;my_uart.c: 47: }
-"47
+"27
+}
+[; ;my_uart.c: 26: }
+[; ;my_uart.c: 27: } else {
+[e $U 588  ]
+[e :U 585 ]
+{
+[; ;my_uart.c: 28: curIndex = 1;
+"28
+[e = _curIndex -> -> 1 `i `uc ]
+[; ;my_uart.c: 29: numBytes = data[0]+1;
+"29
+[e = _numBytes -> + -> *U + _data * -> -> 0 `i `x -> -> # *U _data `i `x `i -> 1 `i `uc ]
+[; ;my_uart.c: 30: while(curIndex < numBytes){
+"30
+[e $U 589  ]
+[e :U 590 ]
+{
+[; ;my_uart.c: 31: while((!TXSTAbits.TRMT));
+"31
+[e $U 592  ]
+[e :U 593 ]
+[e :U 592 ]
+[e $ ! != -> . . _TXSTAbits 0 1 `i -> -> -> 0 `i `Vuc `i 593  ]
+[e :U 594 ]
+[; ;my_uart.c: 32: TXREG = data[curIndex];
+"32
+[e = _TXREG *U + _data * -> _curIndex `ux -> -> # *U _data `ui `ux ]
+[; ;my_uart.c: 33: curIndex++;
+"33
+[e ++ _curIndex -> -> 1 `i `uc ]
+"34
+}
+[e :U 589 ]
+"30
+[e $ < -> _curIndex `i -> _numBytes `i 590  ]
+[e :U 591 ]
+"35
+}
+[e :U 588 ]
+[; ;my_uart.c: 34: }
+[; ;my_uart.c: 35: }
+[; ;my_uart.c: 37: PIE1bits.TXIE = 0;
+"37
+[e = . . _PIE1bits 0 4 -> -> 0 `i `uc ]
+[; ;my_uart.c: 38: }
+"38
 [e :UE 584 ]
 }
+"40
+[v _uart_recv_int_handler `(v ~T0 @X0 1 ef ]
+{
+[; ;my_uart.c: 40: void uart_recv_int_handler() {
+[e :U _uart_recv_int_handler ]
+[f ]
+[; ;my_uart.c: 49: if ((PIR1bits.RCIF)) {
 "49
+[e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 596  ]
+{
+[; ;my_uart.c: 50: uc_ptr->buffer[uc_ptr->buflen] = ReadUSART();
+"50
+[e = *U + &U . *U _uc_ptr 0 * -> . *U _uc_ptr 1 `ux -> -> # *U &U . *U _uc_ptr 0 `ui `ux ( _ReadUSART ..  ]
+[; ;my_uart.c: 54: uc_ptr->buflen++;
+"54
+[e ++ . *U _uc_ptr 1 -> -> 1 `i `uc ]
+[; ;my_uart.c: 56: if (uc_ptr->buflen == 4) {
+"56
+[e $ ! == -> . *U _uc_ptr 1 `i -> 4 `i 597  ]
+{
+[; ;my_uart.c: 57: ToMainLow_sendmsg(uc_ptr->buflen, 32, (void *) uc_ptr->buffer);
+"57
+[e ( _ToMainLow_sendmsg (3 , , . *U _uc_ptr 1 -> -> 32 `i `uc -> &U . *U _uc_ptr 0 `*v ]
+[; ;my_uart.c: 58: uc_ptr->buflen = 0;
+"58
+[e = . *U _uc_ptr 1 -> -> 0 `i `uc ]
+"59
+}
+[e :U 597 ]
+"60
+}
+[e :U 596 ]
+[; ;my_uart.c: 59: }
+[; ;my_uart.c: 60: }
+[; ;my_uart.c: 67: if (USART_Status.OVERRUN_ERROR == 1) {
+"67
+[e $ ! == -> . . _USART_Status 1 3 `i -> 1 `i 598  ]
+{
+[; ;my_uart.c: 72: RCSTAbits.CREN = 0;
+"72
+[e = . . _RCSTAbits 0 4 -> -> 0 `i `uc ]
+[; ;my_uart.c: 73: RCSTAbits.CREN = 1;
+"73
+[e = . . _RCSTAbits 0 4 -> -> 1 `i `uc ]
+[; ;my_uart.c: 74: ToMainLow_sendmsg(0, 30, (void *) 0);
+"74
+[e ( _ToMainLow_sendmsg (3 , , -> -> 0 `i `uc -> -> 30 `i `uc -> -> 0 `i `*v ]
+"75
+}
+[e :U 598 ]
+[; ;my_uart.c: 75: }
+[; ;my_uart.c: 76: }
+"76
+[e :UE 595 ]
+}
+"78
 [v _init_uart_recv `(v ~T0 @X0 1 ef1`*S583 ]
 {
-[; ;my_uart.c: 49: void init_uart_recv(uart_comm *uc) {
+[; ;my_uart.c: 78: void init_uart_recv(uart_comm *uc) {
 [e :U _init_uart_recv ]
 [v _uc `*S583 ~T0 @X0 1 r1 ]
 [f ]
-[; ;my_uart.c: 50: uc_ptr = uc;
-"50
+[; ;my_uart.c: 79: uc_ptr = uc;
+"79
 [e = _uc_ptr _uc ]
-[; ;my_uart.c: 51: uc_ptr->buflen = 0;
-"51
+[; ;my_uart.c: 80: uc_ptr->buflen = 0;
+"80
 [e = . *U _uc_ptr 1 -> -> 0 `i `uc ]
-[; ;my_uart.c: 52: }
-"52
-[e :UE 588 ]
+[; ;my_uart.c: 81: }
+"81
+[e :UE 599 ]
 }

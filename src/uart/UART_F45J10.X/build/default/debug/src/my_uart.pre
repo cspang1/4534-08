@@ -5952,14 +5952,41 @@ unsigned char buflen;
 } uart_comm;
 
 void init_uart_recv(uart_comm *);
+void uart_trans_int_handler(void);
 void uart_recv_int_handler(void);
 
 # 9 "src/my_uart.c"
 static uart_comm *uc_ptr;
 
+void uart_trans_int_handler() {
+
+unsigned char* data = (0);
+unsigned char msgtype;
+unsigned char curIndex;
+signed char length = FromMainLow_recvmsg(10, &msgtype, (void *) data);
+if (length < 0) {
+
+if (length != -4) {
+TXREG = 'Q';
+}
+else{
+TXREG = 'X';
+}
+} else {
+curIndex = 0;
+while(curIndex < length){
+while((!TXSTAbits.TRMT));
+TXREG = data[curIndex];
+curIndex++;
+}
+}
+
+PIE1bits.TXIE = 0;
+}
+
 void uart_recv_int_handler() {
 
-# 20
+# 46
 if ((PIR1bits.RCIF)) {
 uc_ptr->buffer[uc_ptr->buflen] = ReadUSART();
 
@@ -5973,7 +6000,7 @@ uc_ptr->buflen = 0;
 }
 }
 
-# 38
+# 64
 if (USART_Status.OVERRUN_ERROR == 1) {
 
 
