@@ -6,6 +6,9 @@
 
 void init_timer1_lthread(timer1_thread_struct *tptr) {
     tptr->msgcount = 0;
+    tptr->even = 0;
+    tptr->buffer[0] = 200;
+    tptr->buffer[1] = 75;
 }
 
 // This is a "logical" thread that processes messages from TIMER1
@@ -14,8 +17,20 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
 
 int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
     tptr->msgcount++;
-    // Every 6 Timer1 interrupts, do something if you want
+    // Every second (6 timer1 interrupts), send a UART transmission message to
     if ((tptr->msgcount % 6) == 5) {
-        // If you want to do something...
-     }
+        tptr->even ^= 0x01;
+        switch(tptr->even){
+            case 0:
+                tptr->buffer[0] = 0;
+                tptr->buffer[1] = 0;
+                break;
+            case 1:
+                tptr->buffer[0] = 200;
+                tptr->buffer[1] = 72;
+                break;
+        }
+
+        sendUART(2, tptr->buffer);
+    }
 }

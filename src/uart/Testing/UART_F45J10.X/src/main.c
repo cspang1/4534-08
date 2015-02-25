@@ -17,8 +17,6 @@
 #include "timer1_thread.h"
 #include "timer0_thread.h"
 
-
-
 //Setup configuration registers
 #ifdef __USE18F45J10
 // CONFIG1L
