@@ -1,5 +1,5 @@
 
-# 1 "src/user_interrupts.c"
+# 1 "src/main.c"
 
 
 # 21 "E:\MPLAB\xc8\v1.30\include\htc.h"
@@ -5907,10 +5907,80 @@ extern __nonreentrant void _delay3(unsigned char);
 # 41 "src/maindefs.h"
 typedef enum {false, true} BOOL;
 
-# 10 "src/user_interrupts.h"
-void timer0_int_handler(void);
+# 7 "E:\MPLAB\xc8\v1.30\include\stdarg.h"
+typedef void * va_list[1];
 
-void timer1_int_handler(void);
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 23 "E:\MPLAB\xc8\v1.30\include\stdio.h"
+extern int errno;
+
+# 54
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 17 "E:\MPLAB\xc8\v1.30\include\conio.h"
+extern int errno;
+
+
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 31
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 99 "E:\MPLAB\xc8\v1.30\include\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 191
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...);
+extern int sscanf(const char *, const char *, ...);
+extern int vprintf(const char *, va_list);
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap);
+extern int vsscanf(const char *, const char *, va_list);
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
+
+# 12 "src/interrupts.h"
+void enable_interrupts(void);
+
+int in_high_int(void);
+
+int low_int_active(void);
+
+int in_low_int(void);
+
+
+int in_main(void);
 
 # 10 "src/messages.h"
 typedef struct __msg {
@@ -5987,30 +6057,239 @@ void i2c_configure_master(unsigned char);
 unsigned char i2c_master_send(unsigned char,unsigned char *);
 unsigned char i2c_master_recv(unsigned char);
 
-# 17 "src/user_interrupts.c"
-void timer0_int_handler() {
-unsigned int val;
-int length, msgtype;
+# 1 "src/uart_thread.h"
+typedef struct __uart_thread_struct {
 
-# 26
+unsigned char data[10];
+} uart_thread_struct;
+
+void init_uart_lthread(uart_thread_struct *);
+int uart_lthread(uart_thread_struct *,int,int,unsigned char*);
+
+# 1 "src/timer1_thread.h"
+typedef struct __timer1_thread_struct {
+
+unsigned int msgcount;
+} timer1_thread_struct;
+
+void init_timer1_lthread(timer1_thread_struct *);
+int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
+
+# 1 "src/timer0_thread.h"
+typedef struct __timer0_thread_struct {
+
+int data;
+} timer0_thread_struct;
+
+int timer0_lthread(timer0_thread_struct *,int,int,unsigned char*);
+
+
+# 25 "src/main.c"
+#pragma config WDTEN = OFF
+#pragma config STVREN = OFF
+
+
+
+
+#pragma config XINST = OFF
+
+
+
+#pragma config CP0 = OFF
+
+
+#pragma config FOSC = HSPLL
+#pragma config FOSC2 = ON
+#pragma config FCMEN = ON
+#pragma config IESO = ON
+
+
+#pragma config WDTPS = 32768
+
+
+#pragma config CCP2MX = DEFAULT
+
+# 139
+void main(void) {
+char c;
+signed char length;
+unsigned char msgtype;
+unsigned char last_reg_recvd;
+unsigned char baud, UARTConfig;
+uart_comm uc;
+i2c_comm ic;
+unsigned char msgbuffer[10 + 1];
+unsigned char i;
+uart_thread_struct uthread_data;
+timer1_thread_struct t1thread_data;
+timer0_thread_struct t0thread_data;
+
+
+PORTA = 0x0;
+LATA = 0x0;
+ADCON1 = 0x0F;
+CMCON = 0x07;
+TRISA = 0x00;
+
+
+PORTB = 0x0;
+LATB = 0x0;
+TRISB = 0xFF;
+
+# 171
+OSCCON = 0x82;
+OSCTUNEbits.PLLEN = 0;
+
+# 185
+init_uart_recv(&uc);
+
+
+init_i2c(&ic);
+
+
+init_timer1_lthread(&t1thread_data);
+
+
+init_uart_lthread(&uthread_data);
+
+
+
+init_queues();
+
+
+TRISB = 0x0;
+LATB = 0x0;
+
+
+
+OpenTimer0(0b11111111 & 0b10111111 & 0b11111111 & 0b11101111 & 0b11111111);
 WriteTimer0(65500);
 
+# 213
+OpenTimer1(0b11111111 & 0b11001111 & 0b11111111 & 0b11111111 & 0b11110111 & 0b11111111);
+WriteTimer1(65000);
 
-LATAbits.LATA0 = !LATAbits.LATA0;
-unsigned char test[1] = {88};
-sendUART(1, test);
+# 223
+UARTConfig = 0b11111111 & 0b11111111 & 0b11111110 & 0b11111101 & 0b11111111 ;
+baud = 77;
+OpenUSART(UARTConfig,baud);
+
+# 231
+IPR1bits.TMR1IP = 0;
+
+IPR1bits.RCIP = 0;
+
+IPR1bits.TXIP = 0;
+
+IPR1bits.SSPIP = 1;
+
+# 246
+i2c_configure_slave(0x9E);
+
+# 261
+PIE1bits.SSPIE = 1;
+
+
+
+enable_interrupts();
+
+# 279
+unsigned char test[2] = {195,70};
+sendUART(2,test);
+
+# 287
+while (1) {
+
+
+
+block_on_To_msgqueues();
+
+# 298
+length = ToMainHigh_recvmsg(10, &msgtype, (void *) msgbuffer);
+if (length < 0) {
+
+if (length != -4) {
+
+}
+} else {
+switch (msgtype) {
+case 10:
+{
+timer0_lthread(&t0thread_data, msgtype, length, msgbuffer);
+break;
+};
+case 40:
+case 41:
+{
+
+
+last_reg_recvd = msgbuffer[0];
+break;
+};
+case 42:
+{
+
+# 328
+switch (last_reg_recvd) {
+case 0xaa:
+{
+length = 2;
+msgbuffer[0] = 0x55;
+msgbuffer[1] = 0xAA;
+break;
+}
+case 0xa8:
+{
+length = 1;
+msgbuffer[0] = 0x3A;
+break;
+}
+case 0xa9:
+{
+length = 1;
+msgbuffer[0] = 0xA3;
+break;
+}
+};
+start_i2c_slave_reply(length, msgbuffer);
+break;
+};
+default:
+{
+
+break;
+};
+};
 }
 
 
+length = ToMainLow_recvmsg(10, &msgtype, (void *) msgbuffer);
+if (length < 0) {
 
+if (length != -4) {
 
-void timer1_int_handler() {
-unsigned int result;
+}
+} else {
+switch (msgtype) {
+case 11:
+{
+timer1_lthread(&t1thread_data, msgtype, length, msgbuffer);
+break;
+};
+case 30:
+case 31:
+case 32:
+{
+uart_lthread(&uthread_data, msgtype, length, msgbuffer);
+break;
+};
+default:
+{
 
-# 45
-result = ReadTimer1();
-ToMainLow_sendmsg(0, 11, (void *) 0);
+break;
+};
+};
+}
+}
 
-
-WriteTimer1(0);
 }

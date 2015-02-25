@@ -9,6 +9,7 @@
 #endif
 #include "user_interrupts.h"
 #include "messages.h"
+#include "my_uart.h"
 
 // A function called by the interrupt handler
 // This one does the action I wanted for this program on a timer0 interrupt
@@ -21,13 +22,6 @@ void timer0_int_handler() {
 #ifdef __USE18F2680
     LATBbits.LATB0 = !LATBbits.LATB0;
 #endif
-    // reset the timer
-    WriteTimer0(0);
-    // try to receive a message and, if we get one, echo it back
-    length = FromMainHigh_recvmsg(sizeof(val), (unsigned char *)&msgtype, (void *) &val);
-    if (length == sizeof (val)) {
-        ToMainHigh_sendmsg(sizeof (val), MSGT_TIMER0, (void *) &val);
-    }
 }
 
 // A function called by the interrupt handler
@@ -41,9 +35,9 @@ void timer1_int_handler() {
     LATBbits.LATB1 = !LATBbits.LATB1;
 #endif
 
-    result = ReadTimer1();
-    ToMainLow_sendmsg(0, MSGT_TIMER1, (void *) 0);
-
     // reset the timer
-    WriteTimer1(0);
+    WriteTimer1(65000);
+
+    // Toggle LEDs
+    LATAbits.LATA0 = !LATAbits.LATA0;
 }

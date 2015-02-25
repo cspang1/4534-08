@@ -1,5 +1,5 @@
 
-# 1 "src/user_interrupts.c"
+# 1 "src/timer1_thread.c"
 
 
 # 21 "E:\MPLAB\xc8\v1.30\include\htc.h"
@@ -5907,10 +5907,68 @@ extern __nonreentrant void _delay3(unsigned char);
 # 41 "src/maindefs.h"
 typedef enum {false, true} BOOL;
 
-# 10 "src/user_interrupts.h"
-void timer0_int_handler(void);
+# 7 "E:\MPLAB\xc8\v1.30\include\stdarg.h"
+typedef void * va_list[1];
 
-void timer1_int_handler(void);
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 23 "E:\MPLAB\xc8\v1.30\include\stdio.h"
+extern int errno;
+
+# 54
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 17 "E:\MPLAB\xc8\v1.30\include\conio.h"
+extern int errno;
+
+
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 31
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 99 "E:\MPLAB\xc8\v1.30\include\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 191
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...);
+extern int sscanf(const char *, const char *, ...);
+extern int vprintf(const char *, va_list);
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap);
+extern int vsscanf(const char *, const char *, va_list);
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
 
 # 10 "src/messages.h"
 typedef struct __msg {
@@ -5953,64 +6011,31 @@ signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 10 "src/my_uart.h"
-typedef struct __uart_comm {
-unsigned char buffer[4];
-unsigned char buflen;
-} uart_comm;
+# 1 "src/timer1_thread.h"
+typedef struct __timer1_thread_struct {
 
-void init_uart_recv(uart_comm *);
-void uart_trans_int_handler(void);
-void uart_recv_int_handler(void);
-BOOL sendUART(unsigned char, unsigned char*);
+unsigned int msgcount;
+} timer1_thread_struct;
 
-# 7 "src/my_i2c.h"
-typedef struct __i2c_comm {
-unsigned char buffer[10];
-unsigned char buflen;
-unsigned char event_count;
-unsigned char status;
-unsigned char error_code;
-unsigned char error_count;
-unsigned char outbuffer[10];
-unsigned char outbuflen;
-unsigned char outbufind;
-unsigned char slave_addr;
-} i2c_comm;
+void init_timer1_lthread(timer1_thread_struct *);
+int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
 
-# 32
-void init_i2c(i2c_comm *);
-void i2c_int_handler(void);
-void start_i2c_slave_reply(unsigned char,unsigned char *);
-void i2c_configure_slave(unsigned char);
-void i2c_configure_master(unsigned char);
-unsigned char i2c_master_send(unsigned char,unsigned char *);
-unsigned char i2c_master_recv(unsigned char);
-
-# 17 "src/user_interrupts.c"
-void timer0_int_handler() {
-unsigned int val;
-int length, msgtype;
-
-# 26
-WriteTimer0(65500);
-
-
-LATAbits.LATA0 = !LATAbits.LATA0;
-unsigned char test[1] = {88};
-sendUART(1, test);
+# 6 "src/timer1_thread.c"
+void init_timer1_lthread(timer1_thread_struct *tptr) {
+tptr->msgcount = 0;
 }
 
+# 14
+int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
+signed char retval;
+
+tptr->msgcount++;
 
 
+if ((tptr->msgcount % 10) == 9) {
+retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+if (retval < 0) {
 
-void timer1_int_handler() {
-unsigned int result;
-
-# 45
-result = ReadTimer1();
-ToMainLow_sendmsg(0, 11, (void *) 0);
-
-
-WriteTimer1(0);
+}
+}
 }

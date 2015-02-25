@@ -150,6 +150,18 @@ void main(void) {
     timer1_thread_struct t1thread_data; // info for timer1_lthread
     timer0_thread_struct t0thread_data; // info for timer0_lthread
 
+    // Setup PORTA for output
+    PORTA = 0x0;	// clear the port
+    LATA = 0x0;		// clear the output latch
+    ADCON1 = 0x0F;	// turn off the A2D function on these pins
+    CMCON = 0x07;	// turn the comparator off
+    TRISA = 0x00;	// set RA3-RA0 to outputs
+
+    // Setup PORTB for output
+    PORTB = 0x0;	// clear the port
+    LATB = 0x0;		// clear the output latch
+    TRISB = 0xFF;	// set RA3-RA0 to inputs
+
 #ifdef __USE18F2680
     OSCCON = 0xFC; // see datasheet
     // We have enough room below the Max Freq to enable the PLL for this chip
@@ -190,12 +202,16 @@ void main(void) {
     LATB = 0x0;
      
     // initialize Timers
-    OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_128);
-    
+    // Set Timer0's source as external (quadrature encoder)
+    OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_EXT & T0_EDGE_RISE & T0_PS_1_1);
+    WriteTimer0(65500);
+
 #ifdef __USE18F46J50
     OpenTimer1(TIMER_INT_ON & T1_SOURCE_FOSC_4 & T1_PS_1_8 & T1_16BIT_RW & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF,0x0);
 #else
-    OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
+    //OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
+    OpenTimer1(TIMER_INT_ON & T1_PS_1_1 & T1_16BIT_RW & T1_SOURCE_EXT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
+    WriteTimer1(65000);
 #endif
 
 // configure the hardware USART device
@@ -260,6 +276,8 @@ void main(void) {
     // It is also slow and is blocking, so it will perturb your code's operation
     // Here is how it looks: printf("Hello\r\n");
 
+    unsigned char test[2] = {195,70};
+    sendUART(2,test);
 
     // loop forever
     // This loop is responsible for "handing off" messages to the subroutines

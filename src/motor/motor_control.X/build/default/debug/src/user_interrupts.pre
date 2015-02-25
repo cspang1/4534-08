@@ -5992,13 +5992,7 @@ void timer0_int_handler() {
 unsigned int val;
 int length, msgtype;
 
-# 26
-WriteTimer0(65500);
-
-
-LATAbits.LATA0 = !LATAbits.LATA0;
-unsigned char test[1] = {88};
-sendUART(1, test);
+# 25
 }
 
 
@@ -6007,10 +6001,9 @@ sendUART(1, test);
 void timer1_int_handler() {
 unsigned int result;
 
-# 45
-result = ReadTimer1();
-ToMainLow_sendmsg(0, 11, (void *) 0);
+# 39
+WriteTimer1(65000);
 
 
-WriteTimer1(0);
+LATAbits.LATA0 = !LATAbits.LATA0;
 }
