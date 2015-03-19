@@ -99,6 +99,13 @@ void InterruptHandlerHigh() {
         timer0_int_handler();
     }
 
+    if(INTCONbits.RBIF){
+        INTCONbits.RBIF = 0;
+        LATB = 0;
+        LATA = !PORTA;
+        //ToMainHigh_sendmsg(0, MSGT_PORTB_QUAD_ENC, (void *)0);
+    }
+
     // here is where you would check other interrupt flags.
 
     // The *last* thing I do here is check to see if we can
@@ -123,7 +130,7 @@ void InterruptHandlerLow() {
     // check to see if we have an interrupt on timer 1
     if (PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0; //clear interrupt flag
-        timer1_int_handler();
+        ToMainLow_sendmsg(0, MSGT_TIMER1, (void *)0);
     }
 
     // check to see if we have an interrupt on USART RX

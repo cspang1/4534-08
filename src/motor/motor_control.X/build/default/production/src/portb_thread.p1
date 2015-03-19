@@ -1,14 +1,11 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"1 src/timer1_thread.h
-[s S584 `ui 1 `uc -> 2 `i `uc -> 32 `i `uc -> 2 `i `uc 1 `uc 1 `ui 1 `ui 1 ]
-[n S584 __timer1_thread_struct msgcount ctrl quadpos prevPos current_position direction cmDist curMove ]
-"30 src/timer1_thread.c
-[c E4332 0 1 .. ]
-[n E4332 _BOOL FALSE TRUE  ]
-"18 src/my_uart.h
-[v _sendUARTarr `(E4332 ~T0 @X0 0 ef2`uc`*uc ]
-"239 E:\MPLAB\xc8\v1.30\include\plib\timers.h
-[v _WriteTimer1 `(v ~T0 @X0 0 ef1`ui ]
+"1 src/portb_thread.h
+[s S582 `uc -> 10 `i `uc 1 `i 1 `i 1 ]
+[n S582 __portb_thread_struct data dir msgcount dist ]
+"1941 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
+[v _LATA `Vuc ~T0 @X0 0 e@3977 ]
+"44
+[v _PORTA `Vuc ~T0 @X0 0 e@3968 ]
 [; ;htc.h: 22: extern void __builtin_software_breakpoint(void);
 [; ;pic18f45j10.h: 44: extern volatile unsigned char PORTA @ 0xF80;
 "46 E:\MPLAB\xc8\v1.30\include\pic18f45j10.h
@@ -4611,6 +4608,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdio.h: 201: extern int vsscanf(const char *, const char *, va_list);
 [; ;stdio.h: 205: extern int sprintf(char *, const char *, ...);
 [; ;stdio.h: 206: extern int printf(const char *, ...);
+[; ;portb_thread.h: 1: typedef struct __portb_thread_struct {
+[; ;portb_thread.h: 3: unsigned char data[10];
+[; ;portb_thread.h: 4: unsigned char dir;
+[; ;portb_thread.h: 5: int msgcount;
+[; ;portb_thread.h: 6: int dist;
+[; ;portb_thread.h: 7: } portb_thread_struct;
+[; ;portb_thread.h: 9: void init_portb_lthread(portb_thread_struct *);
+[; ;portb_thread.h: 10: int portb_lthread(portb_thread_struct *);
 [; ;messages.h: 10: typedef struct __msg {
 [; ;messages.h: 11: unsigned char full;
 [; ;messages.h: 12: unsigned char length;
@@ -4633,137 +4638,37 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;messages.h: 72: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 [; ;messages.h: 78: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 [; ;messages.h: 79: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;timer1_thread.h: 1: typedef struct __timer1_thread_struct {
-[; ;timer1_thread.h: 3: unsigned int msgcount;
-[; ;timer1_thread.h: 4: unsigned char ctrl[2];
-[; ;timer1_thread.h: 5: char quadpos[32];
-[; ;timer1_thread.h: 6: char prevPos[2];
-[; ;timer1_thread.h: 7: char current_position;
-[; ;timer1_thread.h: 8: unsigned char direction;
-[; ;timer1_thread.h: 9: unsigned int cmDist;
-[; ;timer1_thread.h: 10: unsigned int curMove;
-[; ;timer1_thread.h: 12: } timer1_thread_struct;
-[; ;timer1_thread.h: 14: void init_timer1_lthread(timer1_thread_struct *);
-[; ;timer1_thread.h: 15: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
-[; ;timer1_thread.h: 16: void moveDir(timer1_thread_struct *, int);
-[; ;my_uart.h: 10: typedef struct __uart_comm {
-[; ;my_uart.h: 11: unsigned char buffer[4];
-[; ;my_uart.h: 12: unsigned char buflen;
-[; ;my_uart.h: 13: } uart_comm;
-[; ;my_uart.h: 15: void init_uart_recv(uart_comm *);
-[; ;my_uart.h: 16: void uart_trans_int_handler(void);
-[; ;my_uart.h: 17: void uart_recv_int_handler(void);
-[; ;my_uart.h: 18: BOOL sendUARTarr(unsigned char, unsigned char*);
-[; ;my_uart.h: 19: BOOL sendUARTbyte(unsigned char);
-"7 src/timer1_thread.c
-[v _init_timer1_lthread `(v ~T0 @X0 1 ef1`*S584 ]
+"7 src/portb_thread.c
+[v _init_portb_lthread `(v ~T0 @X0 1 ef1`*S582 ]
 {
-[; ;timer1_thread.c: 7: void init_timer1_lthread(timer1_thread_struct *tptr) {
-[e :U _init_timer1_lthread ]
-[v _tptr `*S584 ~T0 @X0 1 r1 ]
+[; ;portb_thread.c: 7: void init_portb_lthread(portb_thread_struct *bptr){
+[e :U _init_portb_lthread ]
+[v _bptr `*S582 ~T0 @X0 1 r1 ]
 [f ]
-[; ;timer1_thread.c: 8: tptr->msgcount = 0;
+[; ;portb_thread.c: 8: bptr->dist = 0;
 "8
-[e = . *U _tptr 0 -> -> 0 `i `ui ]
-[; ;timer1_thread.c: 9: tptr->ctrl[0] = 182;
+[e = . *U _bptr 3 -> 0 `i ]
+[; ;portb_thread.c: 9: bptr->msgcount = 0;
 "9
-[e = *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 182 `i `uc ]
-[; ;timer1_thread.c: 10: tptr->ctrl[1] = 54;
+[e = . *U _bptr 2 -> 0 `i ]
+[; ;portb_thread.c: 10: }
 "10
-[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 54 `i `uc ]
-[; ;timer1_thread.c: 11: tptr->prevPos[0] = 0;
-"11
-[e = *U + &U . *U _tptr 3 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 3 `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 12: tptr->prevPos[1] = 0;
-"12
-[e = *U + &U . *U _tptr 3 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 3 `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 13: tptr->current_position = 0;
-"13
-[e = . *U _tptr 4 -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 14: tptr->direction = 0;
-"14
-[e = . *U _tptr 5 -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 15: tptr->cmDist = 65535-78;
+[e :UE 585 ]
+}
 "15
-[e = . *U _tptr 6 -> - -> 65535 `l -> -> 78 `i `l `ui ]
-[; ;timer1_thread.c: 16: tptr->curMove = 0;
+[v _portb_lthread `(i ~T0 @X0 1 ef1`*S582 ]
+{
+[; ;portb_thread.c: 15: int portb_lthread(portb_thread_struct *bptr) {
+[e :U _portb_lthread ]
+[v _bptr `*S582 ~T0 @X0 1 r1 ]
+[f ]
+[; ;portb_thread.c: 16: bptr->msgcount++;
 "16
-[e = . *U _tptr 7 -> -> 0 `i `ui ]
-[; ;timer1_thread.c: 17: }
-"17
+[e ++ . *U _bptr 2 -> 1 `i ]
+[; ;portb_thread.c: 18: LATA = !PORTA;
+"18
+[e = _LATA -> -> ! != -> _PORTA `i -> -> -> 0 `i `Vuc `i `i `uc ]
+[; ;portb_thread.c: 19: }
+"19
 [e :UE 586 ]
-}
-"23
-[v _timer1_lthread `(i ~T0 @X0 1 ef4`*S584`i`i`*uc ]
-{
-[; ;timer1_thread.c: 23: int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
-[e :U _timer1_lthread ]
-[v _tptr `*S584 ~T0 @X0 1 r1 ]
-[v _msgtype `i ~T0 @X0 1 r2 ]
-[v _length `i ~T0 @X0 1 r3 ]
-[v _msgbuffer `*uc ~T0 @X0 1 r4 ]
-[f ]
-[; ;timer1_thread.c: 24: tptr->msgcount++;
-"24
-[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 28: if ((tptr->msgcount % tptr->curMove) == tptr->curMove-1) {
-"28
-[e $ ! == % . *U _tptr 0 . *U _tptr 7 - . *U _tptr 7 -> -> 1 `i `ui 588  ]
-{
-[v F5156 `uc ~T0 @X0 -> 2 `i s ]
-[i F5156
-:U ..
-"29
--> -> 0 `i `uc
--> -> 0 `i `uc
-..
-]
-[v _temp `uc ~T0 @X0 -> 2 `i a ]
-[; ;timer1_thread.c: 29: unsigned char temp[2] = {0,0};
-[e = _temp F5156 ]
-[; ;timer1_thread.c: 30: sendUARTarr(2,temp);
-"30
-[e ( _sendUARTarr (2 , -> -> 2 `i `uc &U _temp ]
-"31
-}
-[e :U 588 ]
-[; ;timer1_thread.c: 31: }
-[; ;timer1_thread.c: 33: WriteTimer1(tptr->cmDist);
-"33
-[e ( _WriteTimer1 (1 . *U _tptr 6 ]
-[; ;timer1_thread.c: 42: }
-"42
-[e :UE 587 ]
-}
-"44
-[v _moveDir `(v ~T0 @X0 1 ef2`*S584`i ]
-{
-[; ;timer1_thread.c: 44: void moveDir(timer1_thread_struct *tptr, int cmDist){
-[e :U _moveDir ]
-[v _tptr `*S584 ~T0 @X0 1 r1 ]
-[v _cmDist `i ~T0 @X0 1 r2 ]
-[f ]
-[; ;timer1_thread.c: 45: tptr->curMove = cmDist;
-"45
-[e = . *U _tptr 7 -> _cmDist `ui ]
-[v F5160 `uc ~T0 @X0 -> 2 `i s ]
-[i F5160
-:U ..
-"46
--> -> 80 `i `uc
--> -> 205 `i `uc
-..
-]
-[v _test `uc ~T0 @X0 -> 2 `i a ]
-[; ;timer1_thread.c: 46: unsigned char test[2] = {80,205};
-[e = _test F5160 ]
-[; ;timer1_thread.c: 47: sendUARTarr(2,test);
-"47
-[e ( _sendUARTarr (2 , -> -> 2 `i `uc &U _test ]
-[; ;timer1_thread.c: 48: WriteTimer1(tptr->cmDist);
-"48
-[e ( _WriteTimer1 (1 . *U _tptr 6 ]
-[; ;timer1_thread.c: 49: }
-"49
-[e :UE 589 ]
 }

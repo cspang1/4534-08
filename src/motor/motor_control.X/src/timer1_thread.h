@@ -6,9 +6,11 @@ typedef struct __timer1_thread_struct {
     char prevPos[2];
     char current_position;
     unsigned char direction;
+    unsigned int cmDist;
+    unsigned int curMove;
 
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);
 int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
-void quad_lookup_init(char*);
+void moveDir(timer1_thread_struct *, int);

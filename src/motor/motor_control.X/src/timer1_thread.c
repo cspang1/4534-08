@@ -12,7 +12,8 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
     tptr->prevPos[1] = 0;
     tptr->current_position = 0;
     tptr->direction = 0;
-    quad_lookup_init(tptr->quadpos);
+    tptr->cmDist = 65535-78;
+    tptr->curMove = 0;
 }
 
 // This is a "logical" thread that processes messages from TIMER1
@@ -21,47 +22,28 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
 
 int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
     tptr->msgcount++;
-    char index = msgbuffer[0] + (msgbuffer[1]<<1) + (tptr->prevPos[0]<<3) + (tptr->prevPos[1]<<2);
 
-    tptr->prevPos[0] = msgbuffer[0];
-    tptr->prevPos[1] = msgbuffer[1];
-    /* Every 10
-    if ((tptr->msgcount % 2500) == 2499) {
-        sendUARTbyte('Q');
+    /* STRAIGHT TEST
+     *  Every tptr->curMove feet*/
+    if ((tptr->msgcount % tptr->curMove) == tptr->curMove-1) {
+        unsigned char temp[2] = {0,0};
+        sendUARTarr(2,temp);
+    }
+
+    WriteTimer1(tptr->cmDist);
+
+    /* TURN TEST
+    // Every 22.38385 cm
+    if ((tptr->msgcount % 45) == 44) {
+        unsigned char temp[2] = {0,0};
+        sendUARTarr(2,temp);
+        tptr->msgcount = 0;
     }*/
 }
 
-void quad_lookup_init(char* table){
-    table[0] = 0;
-    table[1] = -1;
-    table[2] = 1;
-    table[3] = -2;
-    table[4] = 1;
-    table[5] = 0;
-    table[6] = -2;
-    table[7] = -1;
-    table[8] = -1;
-    table[9] = -2;
-    table[10] = 0;
-    table[11] = 1;
-    table[12] = -2;
-    table[13] = 1;
-    table[14] = -1;
-    table[15] = 0;
-    table[16] = 0;
-    table[17] = -1;
-    table[18] = 1;
-    table[19] = 2;
-    table[20] = 1;
-    table[21] = 0;
-    table[22] = 2;
-    table[23] = -1;
-    table[24] = -1;
-    table[25] = 2;
-    table[26] = 0;
-    table[27] = 1;
-    table[28] = 2;
-    table[29] = 1;
-    table[30] = -1;
-    table[31] = 0;
+void moveDir(timer1_thread_struct *tptr, int cmDist){
+    tptr->curMove = cmDist;
+    unsigned char test[2] = {80,205};
+    sendUARTarr(2,test);
+    WriteTimer1(tptr->cmDist);
 }
