@@ -11,8 +11,7 @@
 #include "timer1_thread.h"
 #include "timer0_thread.h"
 #include "portb_thread.h"
-
-
+#include "motors.h"
 
 //Setup configuration registers
 #pragma config WDTEN = OFF      // Watchdog Timer Enable bit (WDT disabled (control is placed on SWDTEN bit))
@@ -27,7 +26,6 @@
 #pragma config CCP2MX = DEFAULT // CCP2 MUX bit (CCP2 is multiplexed with RC1)
 
 void main(void) {
-    char c;
     signed char length;
     unsigned char msgtype;
     unsigned char last_reg_recvd;
@@ -35,11 +33,9 @@ void main(void) {
     uart_comm uc;
     i2c_comm ic;
     unsigned char msgbuffer[MSGLEN + 1];
-    unsigned char i;
     uart_thread_struct uthread_data; // info for uart_lthread
     timer1_thread_struct t1thread_data; // info for timer1_lthread
     timer0_thread_struct t0thread_data; // info for timer0_lthread
-    portb_thread_struct pbthread_data; // info for portb_lthread
 
     // Setup PORTA for output
     PORTA = 0x0;	// clear the port
@@ -94,10 +90,7 @@ void main(void) {
     IPR1bits.TXIP = 0;
     // I2C interrupt
     IPR1bits.SSPIP = 1;
-    // PORTB interrupt
-    INTCON2bits.RBIP = 1;
-    INTCONbits.RBIE = 1;
-
+    
     // configure the hardware i2c device as a slave (0x9E -> 0x4F) or (0x9A -> 0x4D)
     i2c_configure_slave(0x9A);
 
@@ -109,15 +102,7 @@ void main(void) {
     enable_interrupts();
 
     /* TESTING QUADRATURE ENCODERS STRAIGHT*/
-    moveDir(&t1thread_data, 183);
-    // 381 ticks = 1 cm
-     
-
-    /* TESTING QUADRATURE ENCODERS TURN
-     
-    unsigned char test[2] = {48,205};
-    sendUARTarr(2,test);
-    WriteTimer1(65457);*/
+    moveDist(&t1thread_data, 168);
 
     // loop forever
     while (1) {
