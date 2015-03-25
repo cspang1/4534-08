@@ -8,7 +8,7 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
     tptr->cmCount = 0;
     tptr->ctrl[0] = 80;
     tptr->ctrl[1] = 205;
-    tptr->cmDist = DELTA_CM;
+    tptr->cmDist = 65458;
     tptr->curMove = 0;
     tptr->distLim = false;
 }

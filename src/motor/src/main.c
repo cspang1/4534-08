@@ -104,7 +104,8 @@ void main(void) {
     enable_interrupts();
 
     // This API call instructs the rover to move forward 168 cm
-    moveDist(&t1thread_data, 30);
+    //turn(&t0thread_data, 90);
+    //122
 
     // loop forever
     while (1) {
@@ -128,28 +129,28 @@ void main(void) {
                 case MSGT_I2C_DATA:
                 {
                     last_reg_recvd = msgbuffer[0];
-                    unsigned char ctrl[2];
                     switch(last_reg_recvd){
-                        case 0x00:
-                        {
-                            ctrl[0] = 0;
-                            ctrl[1] = 0;
-                            break;
-                        }
                         case 0x01:
                         {
-                            ctrl[0] = 199;
-                            ctrl[1] = 73;
+                            move(&t1thread_data);
                             break;
                         }
                         case 0x02:
                         {
-                            ctrl[0] = 182;
-                            ctrl[1] = 54;
+                            turn(&t0thread_data, 270);
+                            break;
+                        }
+                        case 0x03:
+                        {
+                            turn(&t0thread_data, 90);
+                            break;
+                        }
+                        case 0x04:
+                        {
+                            stop(&t1thread_data);
                             break;
                         }
                     }
-                    sendUARTarr(2,ctrl);
                     break;
                 }
                 case MSGT_I2C_DBG:

@@ -60,7 +60,6 @@ typedef enum {false, true} BOOL;
 #define TIMER1_DISABLE T1CONbits.TMR1ON = 0;
 #define TIMER0_ENABLE T0CONbits.TMR0ON = 1;
 #define TIMER0_DISABLE T0CONbits.TMR0ON = 0;
-#define DELTA_CM 65461;
 
 #endif
 

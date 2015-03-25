@@ -24,11 +24,8 @@ void moveDist(timer1_thread_struct *tptr, int dist){
 }
 
 void turn(timer0_thread_struct *tptr, int angle){
-    /*
-     *  Convert angle to dist here
-     */
-    int dist = 0;
     tptr->curMove = angle;
+    tptr->distLim = true;
     TIMER0_ENABLE;
     unsigned char test[2];
     test[0] = tptr->ctrl[0];
@@ -36,6 +33,9 @@ void turn(timer0_thread_struct *tptr, int angle){
     sendUARTarr(2,test);
     WriteTimer0(tptr->cmDist);
 }
+
+//64 -> 16 = 48
+//192 -> 13 = 179
 
 void stop(timer1_thread_struct *tptr){
     unsigned char test[2] = {0,0};
