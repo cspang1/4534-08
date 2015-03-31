@@ -9,4 +9,4 @@
 * Pillow
 
 # Hints
-Although not required, *pip* will make installing the dependencies easier
+Although not required, **pip** will make the installation of the dependencies easier
