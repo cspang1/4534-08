@@ -1,5 +1,4 @@
 #include "maindefs.h"
-#include <stdio.h>
 #include "messages.h"
 #include "timer1_thread.h"
 #include "my_uart.h"
@@ -11,6 +10,7 @@ void init_timer1_lthread(timer1_thread_struct *tptr) {
     tptr->cmDist = 65458;
     tptr->curMove = 0;
     tptr->distLim = false;
+    tptr->ready = true;
 }
 
 int timer1_lthread(timer1_thread_struct *tptr){
@@ -20,6 +20,9 @@ int timer1_lthread(timer1_thread_struct *tptr){
         unsigned char temp[2] = {0,0};
         sendUARTarr(2,temp);
         TIMER1_DISABLE;
+        PORTA = 0x00;
+        tptr->ready = true;
+        tptr->cmCount = 0;
     }
 
     WriteTimer1(tptr->cmDist);

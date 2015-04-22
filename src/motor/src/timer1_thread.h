@@ -11,6 +11,7 @@ typedef struct __timer1_thread_struct {
     unsigned int curMove;
     unsigned int tenCount;
     BOOL distLim;
+    BOOL ready;
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);

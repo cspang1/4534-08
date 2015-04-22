@@ -6,11 +6,14 @@
 
 void init_timer0_lthread(timer0_thread_struct *tptr){
     tptr->cmCount = 0;
-    tptr->ctrl[0] = 30;
-    tptr->ctrl[1] = 223;
-    tptr->cmDist = 65507;
+    tptr->ctrlL[0] = 0x20;
+    tptr->ctrlL[1] = 0xE0;
+    tptr->ctrlR[0] = 0xA0;
+    tptr->ctrlR[1] = 0x5F;
+    tptr->cmDist = 65503;
     tptr->curMove = 0;
     tptr->distLim = false;
+    tptr->ready = true;
 }
 
 int timer0_lthread(timer0_thread_struct *tptr){
@@ -20,6 +23,9 @@ int timer0_lthread(timer0_thread_struct *tptr){
         unsigned char temp[2] = {0,0};
         sendUARTarr(2,temp);
         TIMER0_DISABLE;
+        PORTA = 0x00;
+        tptr->ready = true;
+        tptr->cmCount = 0;
     }
 
     WriteTimer0(tptr->cmDist);

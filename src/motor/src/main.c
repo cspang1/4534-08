@@ -24,6 +24,16 @@
 #pragma config IESO = ON        // Two-Speed Start-up (Internal/External Oscillator Switchover) Control bit (Two-Speed Start-up enabled)
 #pragma config WDTPS = 32768    // Watchdog Timer Postscale Select bits (1:32768)
 #pragma config CCP2MX = DEFAULT // CCP2 MUX bit (CCP2 is multiplexed with RC1)
+#define STOP 0
+#define FORWARD 1
+#define RIGHT 2
+#define LEFT 3
+
+typedef enum {MOVED, MOVE, TURN, ARRET} movement;
+BOOL ready = true;
+int cmds[10] = {MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, -1};
+int args[10] = {305, 90, 31, 90, 305, -90, 31, -90, 305, 0};
+int curCmd;
 
 void main(void) {
     signed char length;
@@ -103,12 +113,45 @@ void main(void) {
     // enable high-priority interrupts and low-priority interrupts
     enable_interrupts();
 
-    // This API call instructs the rover to move forward 168 cm
-    //turn(&t0thread_data, 90);
-    //122
-
     // loop forever
-    while (1) {
+    while (1){
+        ready = t1thread_data.ready && t0thread_data.ready;
+        if(ready){
+            ready = false;
+            int cmd = cmds[curCmd];
+            int arg = args[curCmd];
+            switch(cmd){
+                stop(&t1thread_data);
+                case MOVED:{
+                    t1thread_data.ready = false;
+                    moveDist(&t1thread_data, arg);
+                    break;
+                }
+                case MOVE:{
+                    t1thread_data.ready = false;
+                    move(&t1thread_data);
+                    break;
+                }
+                case TURN:{
+                    t0thread_data.ready = false;
+                    turn(&t0thread_data, arg);
+                    break;
+                }
+                case ARRET:{
+                    t1thread_data.ready = false;
+                    stop(&t1thread_data);
+                    break;
+                }
+                default:{
+                    t1thread_data.ready = true;
+                    t0thread_data.ready = true;
+                    break;
+                }
+            }
+            curCmd++;
+        }
+         * 
+        //move(&t1thread_data);
         // Block while no messages in queue
         block_on_To_msgqueues();
 
@@ -129,25 +172,27 @@ void main(void) {
                 case MSGT_I2C_DATA:
                 {
                     last_reg_recvd = msgbuffer[0];
-                    switch(last_reg_recvd){
-                        case 0x01:
+                    unsigned char command = (last_reg_recvd&192)>>6;
+                    unsigned char valuec = last_reg_recvd&63;
+                    switch(command){
+                        case STOP:
                         {
+                            stop(&t1thread_data);
+                            break;
+                        }
+                        case FORWARD:
+                           {
                             move(&t1thread_data);
                             break;
                         }
-                        case 0x02:
+                        case RIGHT:
                         {
-                            turn(&t0thread_data, 270);
+                            turn(&t0thread_data, -valuec);
                             break;
                         }
-                        case 0x03:
+                        case LEFT:
                         {
-                            turn(&t0thread_data, 90);
-                            break;
-                        }
-                        case 0x04:
-                        {
-                            stop(&t1thread_data);
+                            turn(&t0thread_data, valuec);
                             break;
                         }
                     }
@@ -201,6 +246,7 @@ void main(void) {
             };
         }
 
+        //TEST
         // Check the low priority queue
         length = ToMainLow_recvmsg(MSGLEN, &msgtype, (void *) msgbuffer);
         if (length < 0) {
@@ -230,5 +276,4 @@ void main(void) {
             };
         }
     }
-
 }
