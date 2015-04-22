@@ -42,12 +42,16 @@ void turn(timer0_thread_struct *tptr, int angle){
     tptr->cmCount = 0;
 }
 
-void stop(timer1_thread_struct *tptr){
+void stop(timer0_thread_struct *tptr0, timer1_thread_struct *tptr1){
     PORTA = 0x00;
     unsigned char test[2] = {0,0};
     sendUARTarr(2,test);
-    WriteTimer1(tptr->cmDist);
+    WriteTimer1(tptr1->cmDist);
+    WriteTimer0(tptr0->cmDist);
+    tptr0->cmCount = 0;
+    tptr1->cmCount = 0;
+    tptr0->ready = true;
+    tptr1->ready = true;
     TIMER0_DISABLE;
     TIMER1_DISABLE;
-    tptr->cmCount = 0;
 }

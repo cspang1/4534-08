@@ -7,6 +7,6 @@
 void move(timer1_thread_struct *);
 void moveDist(timer1_thread_struct *, int);
 void turn(timer0_thread_struct *, int);
-void stop(timer1_thread_struct *);
+void stop(timer0_thread_struct *, timer1_thread_struct *);
 
 #endif

@@ -29,12 +29,6 @@
 #define RIGHT 2
 #define LEFT 3
 
-typedef enum {MOVED, MOVE, TURN, ARRET} movement;
-BOOL ready = true;
-int cmds[10] = {MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, -1};
-int args[10] = {305, 90, 31, 90, 305, -90, 31, -90, 305, 0};
-int curCmd;
-
 void main(void) {
     signed char length;
     unsigned char msgtype;
@@ -115,42 +109,6 @@ void main(void) {
 
     // loop forever
     while (1){
-        ready = t1thread_data.ready && t0thread_data.ready;
-        if(ready){
-            ready = false;
-            int cmd = cmds[curCmd];
-            int arg = args[curCmd];
-            switch(cmd){
-                stop(&t1thread_data);
-                case MOVED:{
-                    t1thread_data.ready = false;
-                    moveDist(&t1thread_data, arg);
-                    break;
-                }
-                case MOVE:{
-                    t1thread_data.ready = false;
-                    move(&t1thread_data);
-                    break;
-                }
-                case TURN:{
-                    t0thread_data.ready = false;
-                    turn(&t0thread_data, arg);
-                    break;
-                }
-                case ARRET:{
-                    t1thread_data.ready = false;
-                    stop(&t1thread_data);
-                    break;
-                }
-                default:{
-                    t1thread_data.ready = true;
-                    t0thread_data.ready = true;
-                    break;
-                }
-            }
-            curCmd++;
-        }
-         * 
         //move(&t1thread_data);
         // Block while no messages in queue
         block_on_To_msgqueues();
@@ -177,12 +135,12 @@ void main(void) {
                     switch(command){
                         case STOP:
                         {
-                            stop(&t1thread_data);
+                            stop(&t0thread_data, &t1thread_data);
                             break;
                         }
                         case FORWARD:
                            {
-                            move(&t1thread_data);
+                            moveDist(&t1thread_data, valuec);
                             break;
                         }
                         case RIGHT:

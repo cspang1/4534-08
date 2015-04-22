@@ -4686,15 +4686,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer0_thread.c: 10: tptr->ctrlL[1] = 0xE0;
 "10
 [e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 224 `i `uc ]
-[; ;timer0_thread.c: 11: tptr->ctrlR[0] = 0xA0;
+[; ;timer0_thread.c: 11: tptr->ctrlR[0] = 0xE0;
 "11
-[e = *U + &U . *U _tptr 2 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 2 `ui `ux -> -> 160 `i `uc ]
-[; ;timer0_thread.c: 12: tptr->ctrlR[1] = 0x5F;
+[e = *U + &U . *U _tptr 2 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 2 `ui `ux -> -> 224 `i `uc ]
+[; ;timer0_thread.c: 12: tptr->ctrlR[1] = 0x20;
 "12
-[e = *U + &U . *U _tptr 2 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 2 `ui `ux -> -> 95 `i `uc ]
-[; ;timer0_thread.c: 13: tptr->cmDist = 65503;
+[e = *U + &U . *U _tptr 2 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 2 `ui `ux -> -> 32 `i `uc ]
+[; ;timer0_thread.c: 13: tptr->cmDist = 65506;
 "13
-[e = . *U _tptr 3 -> -> 65503 `l `ui ]
+[e = . *U _tptr 3 -> -> 65506 `l `ui ]
 [; ;timer0_thread.c: 14: tptr->curMove = 0;
 "14
 [e = . *U _tptr 4 -> -> 0 `i `ui ]

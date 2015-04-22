@@ -8,9 +8,9 @@ void init_timer0_lthread(timer0_thread_struct *tptr){
     tptr->cmCount = 0;
     tptr->ctrlL[0] = 0x20;
     tptr->ctrlL[1] = 0xE0;
-    tptr->ctrlR[0] = 0xA0;
-    tptr->ctrlR[1] = 0x5F;
-    tptr->cmDist = 65503;
+    tptr->ctrlR[0] = 0x94;
+    tptr->ctrlR[1] = 0x5C; //5f
+    tptr->cmDist = 65506;
     tptr->curMove = 0;
     tptr->distLim = false;
     tptr->ready = true;

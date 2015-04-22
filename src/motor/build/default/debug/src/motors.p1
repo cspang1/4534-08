@@ -4705,7 +4705,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;motors.h: 7: void move(timer1_thread_struct *);
 [; ;motors.h: 8: void moveDist(timer1_thread_struct *, int);
 [; ;motors.h: 9: void turn(timer0_thread_struct *, int);
-[; ;motors.h: 10: void stop(timer1_thread_struct *);
+[; ;motors.h: 10: void stop(timer0_thread_struct *, timer1_thread_struct *);
 [; ;messages.h: 10: typedef struct __msg {
 [; ;messages.h: 11: unsigned char full;
 [; ;messages.h: 12: unsigned char length;
@@ -4857,17 +4857,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 592 ]
 }
 "45
-[v _stop `(v ~T0 @X0 1 ef1`*S585 ]
+[v _stop `(v ~T0 @X0 1 ef2`*S586`*S585 ]
 {
-[; ;motors.c: 45: void stop(timer1_thread_struct *tptr){
+[; ;motors.c: 45: void stop(timer0_thread_struct *tptr0, timer1_thread_struct *tptr1){
 [e :U _stop ]
-[v _tptr `*S585 ~T0 @X0 1 r1 ]
+[v _tptr0 `*S586 ~T0 @X0 1 r1 ]
+[v _tptr1 `*S585 ~T0 @X0 1 r2 ]
 [f ]
 [; ;motors.c: 46: PORTA = 0x00;
 "46
 [e = _PORTA -> -> 0 `i `uc ]
-[v F5239 `uc ~T0 @X0 -> 2 `i s ]
-[i F5239
+[v F5241 `uc ~T0 @X0 -> 2 `i s ]
+[i F5241
 :U ..
 "47
 -> -> 0 `i `uc
@@ -4876,23 +4877,35 @@ Version 3.2 HI-TECH Software Intermediate Code
 ]
 [v _test `uc ~T0 @X0 -> 2 `i a ]
 [; ;motors.c: 47: unsigned char test[2] = {0,0};
-[e = _test F5239 ]
+[e = _test F5241 ]
 [; ;motors.c: 48: sendUARTarr(2,test);
 "48
 [e ( _sendUARTarr (2 , -> -> 2 `i `uc &U _test ]
-[; ;motors.c: 49: WriteTimer1(tptr->cmDist);
+[; ;motors.c: 49: WriteTimer1(tptr1->cmDist);
 "49
-[e ( _WriteTimer1 (1 . *U _tptr 2 ]
-[; ;motors.c: 50: T0CONbits.TMR0ON = 0;;
+[e ( _WriteTimer1 (1 . *U _tptr1 2 ]
+[; ;motors.c: 50: WriteTimer0(tptr0->cmDist);
 "50
-[e = . . _T0CONbits 0 5 -> -> 0 `i `uc ]
-[; ;motors.c: 51: T1CONbits.TMR1ON = 0;;
+[e ( _WriteTimer0 (1 . *U _tptr0 3 ]
+[; ;motors.c: 51: tptr0->cmCount = 0;
 "51
-[e = . . _T1CONbits 1 0 -> -> 0 `i `uc ]
-[; ;motors.c: 52: tptr->cmCount = 0;
+[e = . *U _tptr0 0 -> -> 0 `i `ui ]
+[; ;motors.c: 52: tptr1->cmCount = 0;
 "52
-[e = . *U _tptr 0 -> -> 0 `i `ui ]
-[; ;motors.c: 53: }
+[e = . *U _tptr1 0 -> -> 0 `i `ui ]
+[; ;motors.c: 53: tptr0->ready = true;
 "53
+[e = . *U _tptr0 6 -> . `E5126 1 `E4455 ]
+[; ;motors.c: 54: tptr1->ready = true;
+"54
+[e = . *U _tptr1 6 -> . `E5126 1 `E4455 ]
+[; ;motors.c: 55: T0CONbits.TMR0ON = 0;;
+"55
+[e = . . _T0CONbits 0 5 -> -> 0 `i `uc ]
+[; ;motors.c: 56: T1CONbits.TMR1ON = 0;;
+"56
+[e = . . _T1CONbits 1 0 -> -> 0 `i `uc ]
+[; ;motors.c: 57: }
+"57
 [e :UE 593 ]
 }

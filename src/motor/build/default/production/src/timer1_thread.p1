@@ -4662,12 +4662,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer1_thread.c: 7: tptr->cmCount = 0;
 "7
 [e = . *U _tptr 0 -> -> 0 `i `ui ]
-[; ;timer1_thread.c: 8: tptr->ctrl[0] = 80;
+[; ;timer1_thread.c: 8: tptr->ctrl[0] = 90;
 "8
-[e = *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 80 `i `uc ]
-[; ;timer1_thread.c: 9: tptr->ctrl[1] = 205;
+[e = *U + &U . *U _tptr 1 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 90 `i `uc ]
+[; ;timer1_thread.c: 9: tptr->ctrl[1] = 215;
 "9
-[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 205 `i `uc ]
+[e = *U + &U . *U _tptr 1 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 1 `ui `ux -> -> 215 `i `uc ]
 [; ;timer1_thread.c: 10: tptr->cmDist = 65458;
 "10
 [e = . *U _tptr 2 -> -> 65458 `l `ui ]

@@ -6013,7 +6013,7 @@ int timer0_lthread(timer0_thread_struct *);
 void move(timer1_thread_struct *);
 void moveDist(timer1_thread_struct *, int);
 void turn(timer0_thread_struct *, int);
-void stop(timer1_thread_struct *);
+void stop(timer0_thread_struct *, timer1_thread_struct *);
 
 # 10 "src/messages.h"
 typedef struct __msg {
@@ -6106,12 +6106,16 @@ WriteTimer0(tptr->cmDist);
 tptr->cmCount = 0;
 }
 
-void stop(timer1_thread_struct *tptr){
+void stop(timer0_thread_struct *tptr0, timer1_thread_struct *tptr1){
 PORTA = 0x00;
 unsigned char test[2] = {0,0};
 sendUARTarr(2,test);
-WriteTimer1(tptr->cmDist);
+WriteTimer1(tptr1->cmDist);
+WriteTimer0(tptr0->cmDist);
+tptr0->cmCount = 0;
+tptr1->cmCount = 0;
+tptr0->ready = true;
+tptr1->ready = true;
 T0CONbits.TMR0ON = 0;;
 T1CONbits.TMR1ON = 0;;
-tptr->cmCount = 0;
 }

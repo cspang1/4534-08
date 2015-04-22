@@ -6114,7 +6114,7 @@ int portb_lthread(portb_thread_struct *);
 void move(timer1_thread_struct *);
 void moveDist(timer1_thread_struct *, int);
 void turn(timer0_thread_struct *, int);
-void stop(timer1_thread_struct *);
+void stop(timer0_thread_struct *, timer1_thread_struct *);
 
 
 # 17 "src/main.c"
@@ -6130,12 +6130,6 @@ void stop(timer1_thread_struct *);
 #pragma config CCP2MX = DEFAULT
 
 # 32
-typedef enum {MOVED, MOVE, TURN, ARRET} movement;
-BOOL ready = true;
-int cmds[10] = {MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, TURN, MOVED, -1};
-int args[10] = {305, 90, 31, 90, 305, -90, 31, -90, 305, 0};
-int curCmd;
-
 void main(void) {
 signed char length;
 unsigned char msgtype;
@@ -6214,12 +6208,10 @@ PIE1bits.SSPIE = 1;
 
 enable_interrupts();
 
-moveDist(&t1thread_data, 25);
-
 
 while (1){
 
-# 158
+
 block_on_To_msgqueues();
 
 
@@ -6244,12 +6236,12 @@ unsigned char valuec = last_reg_recvd&63;
 switch(command){
 case 0:
 {
-stop(&t1thread_data);
+stop(&t0thread_data, &t1thread_data);
 break;
 }
 case 1:
 {
-move(&t1thread_data);
+moveDist(&t1thread_data, valuec);
 break;
 }
 case 2:
@@ -6275,7 +6267,7 @@ break;
 case 42:
 {
 
-# 219
+# 175
 switch (last_reg_recvd) {
 case 0xaa:
 {
