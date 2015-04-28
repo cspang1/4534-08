@@ -9,7 +9,7 @@ __author__ = 'tjd08a'
 
 # Using user given port, open a serial connection
 port = "COM3"
-testing = False
+testing = True
 debug_mode = True
 
 ser = None
@@ -134,11 +134,23 @@ def right_press(event):
     right.flash()
     right.invoke()
 
+def release_call():
+    global debug_mode
+    global release_command
+
+    if debug_mode:
+        ser.write(release_command)
+
 # Callback for up button
 def up_call():
     global command_mode, clear_to_send
     global command_sent, up_number
     global current_command
+    global debug_mode
+
+    if debug_mode:
+        command_mode = True
+        clear_to_send = True
 
     # Switches GUI to command mode
     if not command_mode:
@@ -156,6 +168,11 @@ def back_call():
     global command_mode, clear_to_send
     global command_sent, back_number
     global current_command
+    global debug_mode
+
+    if debug_mode:
+        command_mode = True
+        clear_to_send = True
 
     if not command_mode:
         command_mode = True
@@ -172,6 +189,11 @@ def left_call():
     global command_mode, clear_to_send
     global command_sent, left_number
     global current_command
+    global debug_mode
+
+    if debug_mode:
+        command_mode = True
+        clear_to_send = True
 
     if not command_mode:
         command_mode = True
@@ -190,6 +212,11 @@ def right_call():
     global command_sent
     global right_number
     global current_command
+    global debug_mode
+
+    if debug_mode:
+        clear_to_send = True
+        command_mode = True
 
     if not command_mode:
         command_mode = True
@@ -244,7 +271,7 @@ def send_call(event=None):
     global left_number, right_number, up_number
     global movement_enter, angle_enter
 
-    if current_command != None:
+    if current_command is not None:
         value = None
         if current_command == right_number or current_command == left_number:
             if angle_var.get() != 0:
@@ -442,6 +469,9 @@ back.grid(row=3,column=1, pady=(0,20))
 
 left = Button(container, image=left_arrow, command=left_call, bg="red")
 left.grid(row=2,column=0, padx=(10,0))
+
+release = Button(container, command=release_call, text="RELEASE", font=('Arial', 22), bg="red", fg="white")
+release.grid(row=1, column=0, padx=(10,0))
 
 right = Button(container, image=right_arrow, command=right_call, bg="red")
 right.grid(row=2,column=2)
