@@ -9,7 +9,7 @@ __author__ = 'tjd08a'
 
 # Using user given port, open a serial connection
 port = "COM3"
-testing = True
+testing = False
 debug_mode = True
 
 ser = None
@@ -48,6 +48,9 @@ left_limit = 30
 start_command = chr(0xF)
 stop_command = chr(0x0)
 release_command = chr(0xE)
+restart_command = chr(0xD)
+previous_command = chr(0xC)
+next_command = chr(0xB)
 # End Configuration
 
 # Initiate the graph for sensor data
@@ -69,13 +72,24 @@ line1, = ax.plot(xdata, ydata, 'g-')
 line2, = ax2.plot(xdata, ydata, 'b-')
 line3, = ax2.plot(xdata, ydata, 'm-')
 
+def restart_call(event=None):
+    global restart_command
+    ser.write(restart_command)
+
+def previous_call(event=None):
+    global previous_command
+    ser.write(previous_command)
+
+def next_call(event=None):
+    global next_command
+    ser.write(next_command)
+
 def reboot(event=None):
     global reset_sleep
     # Reboot sequence below
     ser.write('$$$')
     time.sleep(1)
     ser.write('reboot\r')
-    time.sleep(reset_sleep)
     ser.flushInput()
     ser.flushOutput()
 
@@ -98,6 +112,18 @@ def update_log(txt):
     log_panel.insert(END, txt)
     log_panel.yview(END)
 
+def update_display(val):
+    global display_panel
+    display_panel.delete(1.0, END)
+    text = "letter %s\n" % val
+    number = ord(val)
+    print number
+    first_two = number >> 6
+    payload = number & 63
+    text += "first two %i\n" % first_two
+    text += "value %i\n" % payload
+    display_panel.insert(END, text)
+
 # Terminates the GUI/Program
 def exit_call(event=None):
     global root
@@ -118,8 +144,8 @@ def back_press(event):
     global back, rover_backward
 
     hal.config(image=rover_backward)
-    back.flash()
-    back.invoke()
+   # back.flash()
+   # back.invoke()
     hal.after(250, lambda: hal.config(image=hal_img))
 
 # Triggers when left button is pressed
@@ -162,6 +188,7 @@ def up_call():
         current_command = up_number
        # ser.write(val)
         command_sent = True
+    send_call()
 
 # Callback for back button
 def back_call():
@@ -204,7 +231,7 @@ def left_call():
         current_command = left_number
        # ser.write(val)
         command_sent = True
-
+    send_call()
 # Callback for right button
 def right_call():
     global command_mode
@@ -227,6 +254,8 @@ def right_call():
         current_command = right_number
         #ser.write(val)
         command_sent = True
+
+    send_call()
 
 # Callback for hal or center button
 def hal_call(event=None):
@@ -306,7 +335,7 @@ def data_callback():
     global left_activated, right_activated
     global angle, map_tiles, previous, previous_angle
     global debug_mode
-
+    is_started = True
     # Only activates if the GUI has been started
     if is_started:
 
@@ -317,7 +346,15 @@ def data_callback():
             # Reads a byte from the connection
             # Converts the ASCII to a number
             val = ser.read(1)
-            print val
+            update_display(val)
+            print "letter %s" % val
+            number = ord(val)
+            print number
+            first_two = number >> 6
+            payload = number & 63
+            print "first two %i" % first_two
+            print "value %i" % payload
+
             ''''
             letters = ser.read(5)
             val = ord(letters[0])
@@ -464,8 +501,10 @@ hal.grid(row=2,column=1)
 up = Button(container, image=straight_arrow, command=up_call, bg="red")
 up.grid(row=1,column=1)
 
-back = Button(container, image=back_arrow, command=back_call, bg="red")
-back.grid(row=3,column=1, pady=(0,20))
+restart = Button(container, text="RESTART", fg="white", bg="navy", font=('Arial', 22), command=restart_call)
+restart.grid(row=3,column=1)
+#back = Button(container, image=back_arrow, command=back_call, bg="red")
+#back.grid(row=3,column=1, pady=(0,20))
 
 left = Button(container, image=left_arrow, command=left_call, bg="red")
 left.grid(row=2,column=0, padx=(10,0))
@@ -487,7 +526,8 @@ movement_label.grid(row=4, column=1)
 
 movement_var = IntVar(container)
 movement_var.set(0)
-movement_options = OptionMenu(container, movement_var, 0, 10, 20, 30, 40)
+movement_options = OptionMenu(container, movement_var, 0, 5, 10, 15, 20, 25, 30,
+                              35, 40, 45, 50, 55, 60, 63)
 movement_options.config(bg="turquoise")
 movement_options['menu'].config(bg="turquoise")
 movement_options.grid(row=5, column=0)
@@ -500,7 +540,8 @@ angle_label.grid(row=6, column=1)
 
 angle_var = IntVar(container)
 angle_var.set(0)
-angle_options = OptionMenu(container, angle_var, 0, 10, 15, 20, 25)
+angle_options = OptionMenu(container, angle_var, 0, 5, 10, 15, 20, 25, 30,
+                           35, 40, 45, 50, 55, 60, 63)
 angle_options.config(bg="turquoise")
 angle_options['menu'].config(bg="turquoise")
 angle_options.grid(row=7, column=0)
@@ -508,11 +549,10 @@ angle_options.grid(row=7, column=0)
 angle_enter = Entry(container)
 angle_enter.grid(row=7, column=1)
 
+'''
 send_button = Button(container, text="SEND", bg="turquoise", font=('Arial',12), command=send_call)
 send_button.grid(row=5,column=2)
-
-reboot_button = Button(container, text="REBOOT", bg="turquoise", font=('Arial',12), command=reboot)
-reboot_button.grid(row=7, column=2)
+'''
 
 log_panel = Text(container, height=2, width=40)
 #log_panel.grid(row=4, column=0, columnspan=3, sticky='nsew')
@@ -522,6 +562,9 @@ scroll = Scrollbar(container, command = log_panel.yview)
 #scroll.grid(row=4, column=3, padx=(0,2), sticky='nsew')
 log_panel['yscrollcommand'] = scroll.set
 
+
+
+
 window_scroll = Scrollbar(root, command = scroll_region.yview)
 window_scroll.grid(row=0, column=1, sticky='nsew')
 scroll_region['yscrollcommand'] = window_scroll.set
@@ -529,6 +572,19 @@ scroll_region['yscrollcommand'] = window_scroll.set
 canvas = FigureCanvasTkAgg(fig, master=container)
 canvas.show()
 canvas.get_tk_widget().grid(column=4, row=1, rowspan=3)
+
+extra_commands = Frame(container)
+extra_label = Label(extra_commands, text="Additional Commands", font=('Arial', 16))
+extra_label.grid(row=0, column=1)
+reboot_button = Button(extra_commands, text="REBOOT WIFLY", bg="turquoise", font=('Arial',12), command=reboot)
+reboot_button.grid(row=1, column=1)
+previous_button = Button(extra_commands, text="PREVIOUS", bg="turquoise", font=('Arial', 12), command=previous_call)
+previous_button.grid(row=1, column=0)
+next_button = Button(extra_commands, text="NEXT", bg="turquoise", font=('Arial', 12), command=next_call)
+next_button.grid(row=1, column=2)
+display_panel = Text(extra_commands, height=4, width=60)
+display_panel.grid(row=2, column=0, columnspan=3)
+extra_commands.grid(row=4, column=4, rowspan=3)
 
 proximity_sensor = Frame(container)
 
