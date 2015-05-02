@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 __author__ = 'tjd08a'
 
 # Using user given port, open a serial connection
-port = "COM3"
+port = "COM7"
 testing = False
 debug_mode = True
+counter = 0
 
 ser = None
 if not testing:
@@ -34,8 +35,8 @@ current_command = None
 # Configuration Variables
 delay = 400 # Time for method to interrupt/how often to check for serial messages
 reset_sleep = 5 # How long to make the wifly connection sleep at start up
-y_upper_limit = 71 # Biggest data value from serial connection to expect
-y_lower_limit = 5 # Lowest data value from serial connection to expect
+y_upper_limit = 255 # Biggest data value from serial connection to expect
+y_lower_limit = 0 # Lowest data value from serial connection to expect
 angle = 20
 up_number = 1 # Value to represent the Up Direction
 back_number = 5 # Value to represent the Down/Back direction
@@ -51,8 +52,9 @@ release_command = chr(0xE)
 restart_command = chr(0xD)
 previous_command = chr(0xC)
 next_command = chr(0xB)
+finish_command = chr(0xA)
 # End Configuration
-
+graph_mode = False
 # Initiate the graph for sensor data
 fig = plt.Figure()
 ax = fig.add_subplot(211)
@@ -71,6 +73,10 @@ line, = ax.plot(xdata, ydata, 'r-')
 line1, = ax.plot(xdata, ydata, 'g-')
 line2, = ax2.plot(xdata, ydata, 'b-')
 line3, = ax2.plot(xdata, ydata, 'm-')
+
+def finish_call(event=None):
+    global finish_command
+    ser.write(finish_command)
 
 def restart_call(event=None):
     global restart_command
@@ -115,14 +121,13 @@ def update_log(txt):
 def update_display(val):
     global display_panel
     display_panel.delete(1.0, END)
-    text = "letter %s\n" % val
-    number = ord(val)
-    print number
-    first_two = number >> 6
-    payload = number & 63
-    text += "first two %i\n" % first_two
-    text += "value %i\n" % payload
-    display_panel.insert(END, text)
+ #   text = "letter %s\n" % val
+  #  number = ord(val)
+   # print number
+    #payload = number & 63
+    #text += "first two %i\n" % first_two
+    #text += "value %i\n" % payload
+    #display_panel.insert(END, text)
 
 # Terminates the GUI/Program
 def exit_call(event=None):
@@ -134,10 +139,10 @@ def exit_call(event=None):
 def up_press(event):
     global up, hal, rover_forward, hal_img
 
-    hal.config(image=rover_forward) # Switches the up arrow image on the GUI
+    #hal.config(image=rover_forward) # Switches the up arrow image on the GUI
     up.flash() # Makes the up button flash
     up.invoke() # Invoke the callback for the up button
-    hal.after(250, lambda: hal.config(image=hal_img)) # Switch back to the arrow
+   # hal.after(250, lambda: hal.config(image=hal_img)) # Switch back to the arrow
 
 # Triggers when back button is pressed
 def back_press(event):
@@ -275,12 +280,22 @@ def hal_call(event=None):
         #log_txt = "I can't let you do that Dave, this button does nothing.\n"
        # update_log(log_txt)
 
+def hal_helper(event=None):
+    hal_call()
+    hal_call()
+
 # Callback for start button
 def start_call(event=None):
     global is_started, start
     global log_panel, send_start
     global start_command
-
+    global xdata, ydata
+    global ax
+    '''
+    ax.cla()
+    del xdata[:]
+    del ydata[:]
+    '''
     start.flash() # Flash start button
     # Lets the GUI start receiving commands if it's not doing so
     # Sends a handshake if enabled
@@ -335,6 +350,8 @@ def data_callback():
     global left_activated, right_activated
     global angle, map_tiles, previous, previous_angle
     global debug_mode
+    global counter
+    global graph_mode
     is_started = True
     # Only activates if the GUI has been started
     if is_started:
@@ -346,14 +363,17 @@ def data_callback():
             # Reads a byte from the connection
             # Converts the ASCII to a number
             val = ser.read(1)
-            update_display(val)
-            print "letter %s" % val
+            #update_display(val)
+            #print "letter %s" % val
             number = ord(val)
+
+            if number == 69:
+                graph_mode = True
+                counter = 0
+
+            print "Value %i:" % counter
             print number
-            first_two = number >> 6
-            payload = number & 63
-            print "first two %i" % first_two
-            print "value %i" % payload
+
 
             ''''
             letters = ser.read(5)
@@ -363,13 +383,35 @@ def data_callback():
             val4 = ord(letters[3])
             val5 = ord(letters[4])
             '''
+            if graph_mode and number != 69:
+                counter += 1
+                data_points += 1
+            # If valid data has been received, appends it to the graph
+                xdata.append(data_points)
+                ydata.append(number)
+
+                line.set_xdata(xdata)
+                line.set_ydata(ydata)
+
+                xmin, xmax = ax.get_xlim()
+
+                    # Increases the size of the x-axis if enough data points
+                    # have been received.
+                if data_points > xmax:
+                    ax.set_xlim(xmin, xmax + 5)
+                    #    ax2.set_xlim(xmin, xmax + 5)
+
+                # Updates graph
+                fig.canvas.draw()
+
             if command_mode:
                 if debug_mode:
                     clear_to_send = True
                 # Receives a non-ack value in command mode
                 if val != 0:
-                    error_text = "Error: Invalid command mode value received %d\n" % val
-                    update_log(error_text)
+                    pass
+                  #  error_text = "Error: Invalid command mode value received %d\n" % val
+                    #update_log(error_text)
                 else:
                     clear_to_send = True
             else:
@@ -474,7 +516,7 @@ def data_callback():
 
 # Builds/lays out GUI
 root = Tk()
-scroll_region = Canvas(root, width=1240, height=680)
+scroll_region = Canvas(root, width=1342, height=665)
 scroll_region.grid(row=0, column=0, sticky = 'nsew')
 
 container = Frame(scroll_region)
@@ -483,17 +525,21 @@ scroll_region.create_window((0,0), window=container, anchor="nw",
                                   tags="self.frame")
 
 intro_txt = "Rover 9000 Control Panel"
+background_image = ImageTk.PhotoImage(file=path_img + "Metallic.jpg")
+background_label = Label(container, image=background_image)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
 straight_arrow = ImageTk.PhotoImage(file=path_img + "straight.png")
 right_arrow = ImageTk.PhotoImage(file=path_img + "right_turn.png")
 left_arrow = ImageTk.PhotoImage(file=path_img + "left_turn.png")
-back_arrow = ImageTk.PhotoImage(file=path_img + "back.png")
+#back_arrow = ImageTk.PhotoImage(file=path_img + "back.png")
 hal_img = ImageTk.PhotoImage(file=path_img + "hal.jpg")
-rover_forward = ImageTk.PhotoImage(file=path_img + "rover_forward.png")
-rover_backward = ImageTk.PhotoImage(file=path_img + "rover_backward.png")
-rover = ImageTk.PhotoImage(file=path_img + "Rover2.png")
-ramp = ImageTk.PhotoImage(file=path_img + "ramp2.jpg")
-intro = Label(container, text=intro_txt, bg="azure", font=('Arial', 22))
-intro.grid(row=0,column=0,columnspan=5)
+#rover_forward = ImageTk.PhotoImage(file=path_img + "rover_forward.png")
+#rover_backward = ImageTk.PhotoImage(file=path_img + "rover_backward.png")
+#rover = ImageTk.PhotoImage(file=path_img + "Rover2.png")
+#ramp = ImageTk.PhotoImage(file=path_img + "ramp2.jpg")
+intro_image = ImageTk.PhotoImage(file=path_img + "Panel.png")
+intro = Label(container, image=intro_image, font=('Arial', 22))
+intro.grid(row=0,column=0,columnspan=6)
 
 hal = Button(container, image=hal_img, command=hal_call)
 hal.grid(row=2,column=1)
@@ -525,7 +571,7 @@ movement_label = Label(container, text="Movement Amount(cm)")
 movement_label.grid(row=4, column=1)
 
 movement_var = IntVar(container)
-movement_var.set(0)
+movement_var.set(5)
 movement_options = OptionMenu(container, movement_var, 0, 5, 10, 15, 20, 25, 30,
                               35, 40, 45, 50, 55, 60, 63)
 movement_options.config(bg="turquoise")
@@ -539,7 +585,7 @@ angle_label = Label(container, text="Movement Amount(degrees)")
 angle_label.grid(row=6, column=1)
 
 angle_var = IntVar(container)
-angle_var.set(0)
+angle_var.set(5)
 angle_options = OptionMenu(container, angle_var, 0, 5, 10, 15, 20, 25, 30,
                            35, 40, 45, 50, 55, 60, 63)
 angle_options.config(bg="turquoise")
@@ -558,20 +604,17 @@ log_panel = Text(container, height=2, width=40)
 #log_panel.grid(row=4, column=0, columnspan=3, sticky='nsew')
 
 # Attach scrollbar to log panel text box
-scroll = Scrollbar(container, command = log_panel.yview)
+#scroll = Scrollbar(container, command = log_panel.yview)
 #scroll.grid(row=4, column=3, padx=(0,2), sticky='nsew')
-log_panel['yscrollcommand'] = scroll.set
+#log_panel['yscrollcommand'] = scroll.set
 
-
-
-
-window_scroll = Scrollbar(root, command = scroll_region.yview)
-window_scroll.grid(row=0, column=1, sticky='nsew')
-scroll_region['yscrollcommand'] = window_scroll.set
+#window_scroll = Scrollbar(root, command = scroll_region.yview)
+#window_scroll.grid(row=0, column=1, sticky='nsew')
+#scroll_region['yscrollcommand'] = window_scroll.set
 
 canvas = FigureCanvasTkAgg(fig, master=container)
 canvas.show()
-canvas.get_tk_widget().grid(column=4, row=1, rowspan=3)
+canvas.get_tk_widget().grid(column=4, row=1, rowspan=3, pady=(3,0), padx=(6,0))
 
 extra_commands = Frame(container)
 extra_label = Label(extra_commands, text="Additional Commands", font=('Arial', 16))
@@ -583,30 +626,30 @@ previous_button.grid(row=1, column=0)
 next_button = Button(extra_commands, text="NEXT", bg="turquoise", font=('Arial', 12), command=next_call)
 next_button.grid(row=1, column=2)
 display_panel = Text(extra_commands, height=4, width=60)
-display_panel.grid(row=2, column=0, columnspan=3)
+#display_panel.grid(row=2, column=0, columnspan=3)
 extra_commands.grid(row=4, column=4, rowspan=3)
 
-proximity_sensor = Frame(container)
+#proximity_sensor = Frame(container)
 
-sensor_label = Label(container, text="Sensor Statuses", bg="azure", font=('Arial', 16))
+#sensor_label = Label(container, text="Sensor Statuses", bg="azure", font=('Arial', 16))
 #sensor_label.grid(row = 5, column = 1)
 
-left_sensor = Label(proximity_sensor, text="L", bg="green", font=('Arial', 22))
-left_sensor.grid(row=0, column=0)
+#left_sensor = Label(proximity_sensor, text="L", bg="green", font=('Arial', 22))
+#left_sensor.grid(row=0, column=0)
 
-right_sensor = Label(proximity_sensor, text="R", bg="green", font=('Arial', 22))
-right_sensor.grid(row=0, column=2)
+#right_sensor = Label(proximity_sensor, text="R", bg="green", font=('Arial', 22))
+#right_sensor.grid(row=0, column=2)
 
-tilt_sensor = Label(container, text="Ramp", bg="green", font=('Arial', 22))
+#tilt_sensor = Label(container, text="Ramp", bg="green", font=('Arial', 22))
 #tilt_sensor.grid(row=7, column=1, pady=(10,0))
 
-rover_icon = Label(proximity_sensor, image=rover)
-rover_icon.grid(row=0, column=1)
+#rover_icon = Label(proximity_sensor, image=rover)
+#rover_icon.grid(row=0, column=1)
 
 terrain_map = Frame(container, borderwidth=5)
-terrain_map.grid(row=0, column=5, rowspan = 3, padx=(10,0))
+terrain_map.grid(row=0, column=5, rowspan = 3, padx=(4,0))
 
-proximity_sensor.grid(row=3, column=5, pady=(1, 0))
+#proximity_sensor.grid(row=3, column=5, pady=(1, 0))
 
 map_tiles = []
 for i in xrange(46):
@@ -635,17 +678,19 @@ map_tiles[9].config(bg="yellow", fg="yellow")
 width = container.winfo_width()
 height = container.winfo_height()
 
-scroll_region.configure(scrollregion=(0,0,width,700))
+scroll_region.configure(scrollregion=(0,0,width,height))
 #scroll_region.configure(scrollregion=scroll_region.bbox("all"))
 # Binds callback methods to the buttons
 root.bind('<Up>', up_press)
-root.bind('<Down>',back_press)
+root.bind('<Down>', hal_helper)
 root.bind('<Left>',left_press)
 root.bind('<Right>',right_press)
 root.bind('<Escape>',exit_call)
-root.bind('<Return>', start_call)
-root.bind('<space>', hal_call)
-root.configure(bg="azure")
-root.resizable(width=FALSE, height=FALSE)
+root.bind('<space>', start_call)
+#root.bind('<space>', hal_call)
+root.configure(bg="black")
+#root.resizable(width=FALSE, height=FALSE)
 root.after(delay, data_callback)
+root.overrideredirect(True)
+root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 root.mainloop()
